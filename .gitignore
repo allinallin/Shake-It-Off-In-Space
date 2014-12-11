@@ -1,0 +1,21 @@
+# Design assets
+design
+
+# Sass
+.sass-cache
+
+# Task and file management
+node_modules
+bower_components
+dist
+.tmp
+
+# Workspace management
+*.sublime-project
+*.sublime-workspace
+
+# Audio files
+media/audio/*
+
+# Extraneous files
+webaudio-ex.html

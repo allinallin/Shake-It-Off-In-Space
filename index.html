@@ -1,0 +1,40 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Test</title>
+	<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css">
+	<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<!-- 	<h1>SUSI</h1>
+ -->	<div id="main-wrapper">
+		<canvas id="main-stage" tabindex="0"></canvas>
+		
+		<button id="hate-button" class="btn btn-primary btn-lg">Hate Session</button>
+		<button id="song-button" class="btn btn-primary btn-lg">Start Game</button>
+		<p id="fft-stats">
+			<span class="decibals"></span><br/>
+			<span class="frequency"></span><br/>
+			<span class="waveform"></span>
+		</p>
+
+		<p class="help-message">
+			Move with WSAD<br />
+			Click Start Game!
+		</p>
+	</div>
+	<!-- CreateJS Suite -->
+	<script src="/bower_components/easeljs/lib/easeljs-0.7.1.combined.js"></script>
+	<script src="/bower_components/createjs-tweenjs/lib/tweenjs-0.5.1.combined.js"></script>
+	<script src="/bower_components/createjs-soundjs/lib/soundjs-0.5.2.combined.js"></script>
+	<script src="/bower_components/createjs-preloadjs/lib/preloadjs-0.4.1.combined.js"></script>
+	
+	<!-- Other Vendors -->
+	<script src="/bower_components/jquery/dist/jquery.js"></script>
+	<script src="/bower_components/colors/js/colors.js"></script>
+
+	<!-- Main -->
+	<script src="/js/helpers.js"></script>
+	<script src="/js/main.js"></script>
+</body>
+</html>

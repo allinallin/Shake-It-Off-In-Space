@@ -1,0 +1,26 @@
+{
+  "name": "SUSI",
+  "version": "0.1.0",
+  "authors": [
+    "Allin <allin@callinaryarts.co>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "createjs-soundjs": "*",
+    "createjs-preloadjs": "*",
+    "modernizr": "~2.8.3",
+    "jquery": "~2.1.1",
+    "colors": "~2.0.0",
+    "createjs-tweenjs": "*",
+    "easeljs": "*",
+    "bootstrap": "~3.2.0"
+  }
+}
