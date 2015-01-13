@@ -1,40 +1,95 @@
 <html>
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Test</title>
-	<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css">
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.2/normalize.min.css">
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+    <!-- build:css css/styles.css -->
 	<link rel="stylesheet" href="css/styles.css">
+    <!-- endbuild -->
 </head>
 <body>
-<!-- 	<h1>SUSI</h1>
- -->	<div id="main-wrapper">
-		<canvas id="main-stage" tabindex="0"></canvas>
+ 	<div class="main-wrapper">
+		<canvas class="main-stage" tabindex="0"></canvas>
+
+		<div class="title">
+			<p>Shake it Off</p>
+			<marquee class="small">In Space</marquee>
+		</div>
+
+		<div class="countdown">Ready...</div>
+
+		<div class="game-over">Game Over</div>
+
+		<button class="replay-button">
+			<i class="fa fa-repeat"></i>
+		</button>
 		
-		<button id="hate-button" class="btn btn-primary btn-lg">Hate Session</button>
-		<button id="song-button" class="btn btn-primary btn-lg">Start Game</button>
-		<p id="fft-stats">
+		<button class="play-button">
+			<i class="fa fa-play"></i>
+		</button>
+		
+		<div class="help-box">
+			<div class="align-wrapper">
+				<div class="help-controls">
+					<div class="controls">
+						<div class="row">
+							<p class="up">
+								<i class="fa fa-arrow-up"></i>
+							</p>
+						</div>
+						<div class="row">
+							<p class="left">
+								<i class="fa fa-arrow-left"></i>
+							</p>
+							<p class="down">
+								<i class="fa fa-arrow-down"></i>
+							</p>
+							<p class="right">
+								<i class="fa fa-arrow-right"></i>
+							</p>
+						</div>
+					</div>
+					<div class="copy">
+						<p>To Dodge (in flight)</p>
+						<p>To Shake (on ground)</p>
+					</div>
+				</div>
+				<div class="briefing">
+					<p>Oh no! Taylor is trying to traverse the wonders of the galaxy but little space monsters keep getting in the way! Arghhh!</p>
+					
+					<p><strong>Stage 1 - Air Defense:</strong><br>
+						They're attacking from all sides!<br>Use the arrow keys to dodge these bad boys.
+					</p>
+
+					<p><strong>Stage 2 - Ground Offense:</strong><br>
+						Did a monster stick? It's time to SHAKE. IT. OFF. Listen for the right times in the music to use your arrow keys!
+					</p>
+				</div>
+				<button class="launch-button">Launch <i class="fa fa-space-shuttle"></i></button>
+			</div>
+		</div>
+		
+		<!-- DEBUG ELEMENTS -->
+		<!-- <button class="hate-button">Hate Session</button>
+		<p class="fft-stats">
 			<span class="decibals"></span><br/>
 			<span class="frequency"></span><br/>
 			<span class="waveform"></span>
-		</p>
-
-		<p class="help-message">
-			Move with WSAD<br />
-			Click Start Game!
-		</p>
+		</p> -->
 	</div>
 	<!-- CreateJS Suite -->
-	<script src="/bower_components/easeljs/lib/easeljs-0.7.1.combined.js"></script>
-	<script src="/bower_components/createjs-tweenjs/lib/tweenjs-0.5.1.combined.js"></script>
-	<script src="/bower_components/createjs-soundjs/lib/soundjs-0.5.2.combined.js"></script>
-	<script src="/bower_components/createjs-preloadjs/lib/preloadjs-0.4.1.combined.js"></script>
+	<script src="http://code.createjs.com/easeljs-0.8.0.min.js"></script>
+	<script src="http://code.createjs.com/tweenjs-0.6.0.min.js"></script>
+	<script src="http://code.createjs.com/soundjs-0.6.0.min.js"></script>
+	<script src="http://code.createjs.com/preloadjs-0.6.0.min.js"></script>
 	
-	<!-- Other Vendors -->
-	<script src="/bower_components/jquery/dist/jquery.js"></script>
-	<script src="/bower_components/colors/js/colors.js"></script>
-
 	<!-- Main -->
+    <!-- build:js js/scripts.js -->
+    <script src="/bower_components/colors/js/colors.js"></script>
 	<script src="/js/helpers.js"></script>
 	<script src="/js/main.js"></script>
+    <!-- endbuild -->
 </body>
 </html>

@@ -1,51 +1,67 @@
-(function (window, document, c, $) {
+(function (window, document, c) {
 	'use strict';
 
-	var stage, queue, hero, hater, healthBar, song, music,
-		haterInterval = null,
-		haterCounter,
-		stars,
-		starsLittle,
-		starsBig,
-		starsAlpha,
-		numStars,
-		planet,
-		canvas = document.getElementById('main-stage'),
-		canvasWidth = window.innerWidth,
-		canvasHeight = window.innerHeight,
-		buttonHate = document.getElementById('hate-button'),
-		buttonSong = document.getElementById('song-button'),
-		textDecibals = document.querySelector('.decibals'),
-		textFrequency = document.querySelector('.frequency'),
-		textWaveform = document.querySelector('.waveform'),
+	var stage
+	var queue;
 
-		gameStarted,
-		gameState,
-		helpMsg = document.querySelector('.help-message'),
+	var hero;
+	var hater;
 
-		shakeIt = {
-			hitCounter: null,
-			enemyCounter: null,
-			modulusFactor: null,
-			windows: [
-				[0, 0.8],
-				[1.1, 1.9],
+	var song;
+	var music;
+	
+	var haterInterval = null;
+	var haterCounter;
 
-				[3.0, 3.8],
-				[4.1, 4.9],
+	var stars;
+	var starsLittle;
+	var starsBig;
+	var starsAlpha;
+	var numStars;
+	var planet;
+	
+	var canvas = document.querySelector('.main-stage');
+	var canvasWidth = window.innerWidth;
+	var canvasHeight = window.innerHeight;
+	
+	var gameStarted;
+	var gameState;
+	var countdown = document.querySelector('.countdown');
 
-				[6.0, 6.8],
-				[7.1, 8.9],
+	var gameOverMsg = document.querySelector('.game-over');
+	var replayButton = document.querySelector('.replay-button');
 
-				[9.0, 9.8],
-				[10.1, 10.9]
-			],
-			windowHitLimit: 3,
-			windowHitLimitTracker: []
-		},
+	var shakeIt = {
+		hitCounter: null,
+		enemyCounter: null,
+		modulusFactor: null,
+		windows: [
+			[0, 0.8],
+			[1.1, 1.9],
 
-		debugMute;
+			[3.0, 3.8],
+			[4.1, 4.9],
 
+			[6.0, 6.8],
+			[7.1, 8.9],
+
+			[9.0, 9.8],
+			[10.1, 10.9]
+		],
+		windowHitLimit: 3,
+		windowHitLimitTracker: []
+	};
+
+	/* DEBUG VARIABLES */
+	var	debugMode = false;
+	if (debugMode) {
+		var buttonHate = document.querySelector('.hate-button');
+		var textDecibals = document.querySelector('.decibals');
+		var textFrequency = document.querySelector('.frequency');
+		var textWaveform = document.querySelector('.waveform');
+
+		buttonHate.addEventListener('click', hateSession);
+	}
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
 	/* 					*\
@@ -53,7 +69,7 @@
 	\*					*/
 
 	function init () {
-		stage = new c.Stage("main-stage");
+		stage = new c.Stage(canvas);
 		queue = new c.LoadQueue();
 		queue.installPlugin(c.Sound);
 		queue.addEventListener('complete', queueReady);
@@ -94,7 +110,6 @@
 		numStars = 110;
 		
 		createStarField();
-		//createHealthBar();
 		analyseMusic();
 
 		hero   = new Hero();
@@ -108,9 +123,26 @@
 		}, 20);
 	}
 
+	/* 					*\
+		INSTRUCTIONS
+	\*					*/
+	var title = document.querySelector('.title');
+	var playButton = document.querySelector('.play-button');
+	var launchButton = document.querySelector('.launch-button');
+	var helpBox = document.querySelector('.help-box');
+
+	playButton.addEventListener('click', function() {
+		helpBox.style.display = 'table';
+		canvas.focus();
+	}, false);
+
+	replayButton.addEventListener('click', startGame, false);
+	launchButton.addEventListener('click', startGame, false);
+
 	/* 			*\
 		MUSIC
 	\*			*/
+	
 	var analyserNode;       // the analyser node that allows us to visualize the audio
 	var fftSize = 1024;
 	var freqFloatData, freqByteData, timeByteData;  // arrays to retrieve data from analyserNode
@@ -137,6 +169,7 @@
 		freqByteData = new Uint8Array(analyserNode.frequencyBinCount);
 		timeByteData = new Uint8Array(analyserNode.frequencyBinCount);
 	}
+	
 
 	var soundInstance;
 
@@ -146,7 +179,7 @@
 
 		soundInstance = c.Sound.play( sectionName );
 
-		if (debugMute) soundInstance.volume = 0;
+		if (debugMode) soundInstance.volume = 0;
 
 		soundInstance.addEventListener('complete', function() {
 			onCompleteMusic( sectionName );
@@ -157,7 +190,8 @@
 		var sectionOffset = 3000,
 			hitThree, hitTwo, hitOne, hitYeah;
 
-		helpMsg.innerHTML = 'Ready...';
+		countdown.style.display = 'block';
+		countdown.textContent = 'Ready...';
 
 		gameState = 'leadin';
 
@@ -169,27 +203,24 @@
 
 			var position = soundInstance.getPosition();
 
-			helpMsg.style.fontSize = '3em';
-			helpMsg.style.fontWeight = '500';
-
 			if (!hitOne && position > 5525 - sectionOffset) {
 				hitOne = true;
-				helpMsg.innerHTML = '1';
+				countdown.textContent = '1';
 				colorStarsAlpha('randomize');
 			}
 			else if (!hitTwo && position > 5150 - sectionOffset){
 				hitTwo = true;
-				helpMsg.innerHTML = '2';
+				countdown.textContent = '2';
 				colorStarsAlpha('randomize');
 			}
 			else if (!hitThree && position > 4775 - sectionOffset) {
 				hitThree = true;
-				helpMsg.innerHTML = '3';
+				countdown.textContent = '3';
 				colorStarsAlpha('randomize');
 			}
 			else if (!hitYeah && position > 4313 - sectionOffset) {
 				hitYeah = true;
-				helpMsg.innerHTML = 'YEEAHH!';
+				countdown.textContent = 'YEEAHH!';
 			}
 			
 			if (gameState == 'leadin')
@@ -203,7 +234,7 @@
 		gameState = 'chorus1';
 
 		hateSession();
-		helpMsg.innerHTML = '';
+		countdown.style.display = 'none';
 		changeStarSpeed( 'fast' );
 		stretchStarHeight( 10 );
 
@@ -396,11 +427,13 @@
 		
 		var freqValue = freqByteData[25],
 			freqPercent = freqValue / 255;
-		/*
-		textDecibals.innerHTML = freqFloatData[0];
-		textFrequency.innerHTML = freqValue;
-		textWaveform.innerHTML = timeByteData[0];
-		*/
+
+		if (debugMode) {
+			textDecibals.innerHTML = freqFloatData[0];
+			textFrequency.innerHTML = freqValue;
+			textWaveform.innerHTML = timeByteData[0];
+		}
+
 		var radiusRatioLarge = freqPercent * 100;
 		var radiusRatioSmall = freqPercent * 50;
 
@@ -427,35 +460,6 @@
 		        curStar.y = -getRandomInt(20, canvasHeight - 30);					
 		    }
 	    }
-	}
-	
-	function createHealthBar () {
-		healthBar = new HealthBar();
-
-		healthBar.x = 20;
-		healthBar.y = canvasHeight - 75;
-	}
-
-	function HealthBar() {
-		var that = this;
-
-		c.Container.call(this);
-
-		var bar 	= new c.Shape(),
-		 	maxWidth 	= canvasWidth / 2,
-		 	initHealth 	= 20,
-		 	initWidth	= initHealth / 100 * maxWidth; 
-
-		bar.graphics.beginFill(colors.green).drawRect(20, canvasHeight - 70, initWidth, 50);
-
-		stage.addChildAt( bar, numStars );
-
-		this.update = function( healthUnits ) {
-			var newWidth = healthUnits / 100 * maxWidth;
-
-			bar.graphics.clear();
-			bar.graphics.beginFill(colors.green).drawRect(20, canvasHeight - 70, newWidth, 50);
-		}
 	}
 
 	function planetInit() {
@@ -502,41 +506,12 @@
 		this.setBounds(-bmp.getTransformedBounds().width / 2, -bmp.getTransformedBounds().height / 2, bmp.getTransformedBounds().width, bmp.getTransformedBounds().height)
 		this.heroBody = bmp;
 		this.addChild( this.heroBody );
-		
-		/*
-		this.heroHead  = new c.Shape();
-		this.heroBody  = new c.Shape();
-		this.heroPants = new c.Shape();
-
-		this.addChild( this.heroBody );
-		this.addChild( this.heroHead );
-		this.addChild( this.heroPants );
-
-		this.prepStyles = (function () {
-			var headG  = that.heroHead.graphics;
-			var bodyG  = that.heroBody.graphics;
-			var pantsG = that.heroPants.graphics;
-			
-			headG.beginFill(colors.orange).drawCircle(0, 0, 10);
-			bodyG.beginFill(colors.silver).drawRect(-8, 8, 16, 30);
-			pantsG.beginFill(colors.red).drawRect(-6, 38, 12, 5);
-		})();
-		*/
 	
-		this.health 		= 20;
 		this.movingUpDown	= false;
 		this.movingLeft 	= false;
 		this.movingRight 	= false;
 
 		var movingLeftInterval = null;
-
-		this.updateHealth = function( healthUnits ) {
-			var newHealth = this.health + healthUnits;
-			newHealth = newHealth > 100 ? 100 : (newHealth < 0) ? 0 : newHealth;
-
-			this.health = newHealth;
-		//	healthBar.update( newHealth );
-		}
 
 		this.moveUp = function() {
 			if (!this.movingUpDown) {
@@ -751,7 +726,6 @@
 		this.detectOverlapWithPlayer = function() {
 			var overlapDetails = detectOverlap( that, hero );
 			if ( overlapDetails.success ) {
-				hero.updateHealth( -10 );
 				// hero.rattle();
 				stickHaterToHero( that.clone(true), overlapDetails );
 
@@ -943,7 +917,6 @@
 				upperLimit = shakeIt.windows[i][1] * 1000;
 
 			if (isInBetween( position, lowerLimit, upperLimit ) && shakeIt.windowHitLimitTracker[i] < 3) {
-				hero.updateHealth( 2.5 );
 
 				shakeIt.hitCounter++;
 				shakeIt.windowHitLimitTracker[i]++;
@@ -978,7 +951,6 @@
 
 		if (distanceMoved > 20) {
 			var healthUnits = distanceMoved / 20;
-			hero.updateHealth( healthUnits );
 		}
 		*/
 
@@ -1018,9 +990,9 @@
 					hero.moveRight();
 				break;
 			case p:
-				debugMute = !debugMute;
+				debugMode = !debugMode;
 				if (soundInstance)
-					soundInstance.volume = !debugMute;
+					soundInstance.volume = !debugMode;
 				break;
 		}
 	}
@@ -1059,21 +1031,16 @@
 
 	canvas.addEventListener('keyup', keyUpListener, false);
 
-	buttonHate.addEventListener('click', hateSession);
-
-	buttonSong.addEventListener('click', function() {
-		if (!gameStarted)
-			startGame();
-		else
-			endGame();
-
-		canvas.focus();
-	});
-
 	function startGame() {
+		canvas.focus();
+
 		gameStarted = true;
-		buttonSong.innerHTML = 'End Game';
-		helpMsg.innerHTML = '';
+
+		title.style.display = 'none';
+		playButton.style.display = 'none';
+		helpBox.style.display = 'none';
+		gameOverMsg.style.display = 'none';
+		replayButton.style.display = 'none';
 
 		hero.movingUp = false;
 		hero.movingDown = false;
@@ -1086,7 +1053,7 @@
 
 	function endGame() {
 		soundInstance.stop();
-		buttonSong.innerHTML = 'Replay Game';
+
 		canvas.removeEventListener('keydown', shakeItKeyDownListener, false);
 		canvas.removeEventListener('keyup', shakeItKeyUpListener, false);
 
@@ -1101,6 +1068,9 @@
 		changeStarSpeed( 'slow' );
 		clearInterval(haterInterval);
 		haterInterval = null;
+
+		gameOverMsg.style.display = 'block';
+		replayButton.style.display = 'block';
 
 		if (hero.getNumChildren() > 1) {
 			for (var i = hero.getNumChildren() - 2; i >= 0; i--) {
@@ -1132,11 +1102,9 @@
 
 	Hero.prototype = Object.create(c.Container.prototype);
 	Hater.prototype = Object.create(c.Container.prototype);
-	HealthBar.prototype = Object.create(c.Container.prototype);
 
 	window.Hero = Hero;
 	window.Hater = Hater;
-	window.HealthBar = HealthBar;
 
 	init();
-})(window, document, createjs, jQuery);
+})(window, document, createjs);

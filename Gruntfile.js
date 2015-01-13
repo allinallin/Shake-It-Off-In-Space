@@ -2,8 +2,15 @@
 module.exports = function(grunt) {
 	require('load-grunt-tasks')(grunt);
 	require('time-grunt')(grunt);
+    
+    // Configurable paths
+    var config = {
+        app: '.',
+        dist: 'dist'
+    };
 
 	grunt.initConfig({
+        config: config,
 		connect: {
             options: {
                 port: 9000,
@@ -15,6 +22,13 @@ module.exports = function(grunt) {
                 options: {
                     open: true
                 }
+            },
+            dist: {
+                options: {
+                    open: true,
+                    base: '<%= config.dist %>',
+                    livereload: false
+                }
             }
         },
 		watch: {
@@ -22,18 +36,32 @@ module.exports = function(grunt) {
                 files: ['Gruntfile.js']
             },
 			sass: {
-				files: ['scss/**/*.{scss,sass}'],
+				files: ['<%= config.app %>/scss/**/*.{scss,sass}'],
 				tasks: ['sass', 'autoprefixer', 'cssmin']
 			},
 			livereload: {
 				options: { livereload: true },
-				files: ['css/**/*.css', '**/*.php', '**/*.html', 'js/**/*.js', 'media/**/*.{png,jpg,jpeg,gif,webp,svg,mp3,mp4,webm,ogg,ogv}']
+				files: [
+                    '<%= config.app %>/css/**/*.css', 
+                    '<%= config.app %>/**/*.php', 
+                    '<%= config.app %>/**/*.html', 
+                    '<%= config.app %>/js/**/*.js', 
+                    '<%= config.app %>/media/**/*.{png,jpg,jpeg,gif,webp,svg,mp3,mp4,webm,ogg,ogv}'
+                ]
 			}
 		},
+        clean: {
+            dist: {
+                files: [{
+                    dot: true,
+                    src: ['<%= config.dist %>/*']
+                }]
+            }
+        },
 		sass: {
 			dist: {
 				files: {
-					'css/styles.css': 'scss/styles.scss'
+					'<%= config.app %>/css/styles.css': '<%= config.app %>/scss/styles.scss'
 				}
 			}
 		},
@@ -45,29 +73,107 @@ module.exports = function(grunt) {
             files: {
                 expand: true,
                 flatten: true,
-                src: 'css/styles.css',
-                dest: 'css'
-            },
+                src: '<%= config.app %>/css/styles.css',
+                dest: '<%= config.app %>/css'
+            }
         },
-        cssmin: {
+        // cssmin: {
+        //     options: {
+        //         keepSpecialComments: 1
+        //     },
+        //     minify: {
+        //         expand: true,
+        //         cwd: 'css/styles.css',
+        //         src: ['*.css', '!*.min.css'],
+        //         ext: '.css'
+        //     }
+        // },
+        // Renames files for browser caching purposes
+        rev: {
+            dist: {
+                files: {
+                    src: [
+                        '<%= config.dist %>/js/{,*/}*.js',
+                        '<%= config.dist %>/css/{,*/}*.css',
+                        '<%= config.dist %>/*.{ico,png}'
+                    ]
+                }
+            }
+        },
+        // Reads HTML for usemin blocks to enable smart builds that automatically
+        // concat, minify and revision files. Creates configurations in memory so
+        // additional tasks can operate on them
+        useminPrepare: {
             options: {
-                keepSpecialComments: 1
+                dest: '<%= config.dist %>'
             },
-            minify: {
-                expand: true,
-                cwd: 'css/styles.css',
-                src: ['*.css', '!*.min.css'],
-                ext: '.css'
+            html: '<%= config.app %>/index.html'
+        },
+        // Performs rewrites based on rev and the useminPrepare configuration
+        usemin: {
+            options: {
+                assetsDirs: ['<%= config.dist %>', '<%= config.dist %>/media/images']
+            },
+            html: ['<%= config.dist %>/{,*/}*.html'],
+            css: ['<%= config.dist %>/css/{,*/}*.css']
+        },
+        imagemin: {
+            dist: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= config.app %>/media/images',
+                    src: '{,*/}*.{gif,jpeg,jpg,png}',
+                    dest: '<%= config.dist %>/media/images'
+                }]
+            }
+        },
+        svgmin: {
+            dist: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= config.app %>/media/images',
+                    src: '{,*/}*.svg',
+                    dest: '<%= config.dist %>/media/images'
+                }]
+            }
+        },
+        copy: {
+            dist: {
+                files: [
+                    {
+                        expand: true,
+                        dot: true,
+                        cwd: '<%= config.app %>',
+                        dest: '<%= config.dist %>',
+                        src: [
+                            '<%= config.app %>/index.html', 
+                            '<%= config.app %>/media/**/*.{webp,mp3,mp4,webm,ogg,ogv,wav}'
+                        ]
+                    }
+                ]
             }
         }
 	});
 
     grunt.registerTask('build', function() {
-        grunt.task.run(['autoprefixer', 'sass']);
+        grunt.task.run([
+            'clean:dist', 
+            'useminPrepare', 
+            'sass', 
+            'autoprefixer', 
+            'imagemin', 
+            'svgmin',
+            'concat',
+            'cssmin',
+            'uglify',
+            'copy:dist',
+            'rev', 
+            'usemin'
+        ]);
     });
 
 	grunt.registerTask('serve', function() {
-        grunt.task.run(['build']);
+        grunt.task.run(['sass', 'autoprefixer']);
         grunt.task.run(['connect:livereload', 'watch']);
     });
 
