@@ -23,5 +23,11 @@ The audio folder and files were intentionally left out of the `media` folder. Th
 - [bower](http://bower.io/)
 
 ## Browser Compatibility
-Just use the latest desktop version of Chrome, Safari, or Firefox. Not suited for Internet Explorer. Not mobile-ready.
+The following browser features are required:
+
+- [Canvas](http://caniuse.com/canvas)
+- [WebAudio](http://caniuse.com/audio-api) or [HTMLAudioElement](http://caniuse.com/audio)
+- Support for [Ogg or WAVE](https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats#Browser_compatibility) audio formats
+
+The web app is not optimized for mobile and requires a keyboard.
 

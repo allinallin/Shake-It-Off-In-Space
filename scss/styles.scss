@@ -160,3 +160,27 @@ button {
 		font-weight: 	400;
 	}
 }
+.browser-warning-box {
+	@include abs-center(400px, 620px);
+	display: 		none;
+	padding: 		1em;
+	box-sizing: 	border-box;
+	background: 	rgba(#222, 0.95);
+	letter-spacing: 0.05em;
+	font-weight: 	100;
+	color: 			white;
+	p { margin: 1em 0; }
+}
+.close-warning-button {
+	font-size: 		1.5em;
+	letter-spacing: 0.1em;
+	padding: 		0.25em 0.5em;
+	border-radius: 	5px;
+	color: $gray;
+	border-color: $gray;
+	margin-top: 0.5em;
+	&:hover {
+		color: white;
+		border-color: white;
+	}
+}

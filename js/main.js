@@ -1,6 +1,38 @@
 (function (window, document, c) {
 	'use strict';
 
+	(function supportCheck() {
+		var warningBox = document.querySelector('.browser-warning-box');
+		var warningList = document.querySelector('.browser-warning-box ul');
+		var closeButton = document.querySelector('.close-warning-button');
+		var missingFeatures = [];
+		
+		if (!featureDetect.audioOgg && !featureDetect.audioWav) {
+			missingFeatures.push('Missing support for Ogg or WAVE audio formats');
+		}
+
+		if (!featureDetect.canvas) {
+			missingFeatures.push('Missing support for Canvas');
+		}
+
+		if (missingFeatures.length) {
+
+			for (var i = 0; i < missingFeatures.length; i++) {
+				var feature = missingFeatures[i];
+				var listElm = document.createElement('li');
+
+				listElm.textContent = feature;
+				warningList.appendChild(listElm);
+			};
+
+			closeButton.addEventListener('click', function() {
+				warningBox.style.display = 'none';
+			});
+
+			warningBox.style.display = 'table';
+		}
+	})();
+
 	var stage
 	var queue;
 
@@ -892,10 +924,10 @@
 	}
 
 	function shakeItAttack (key) {
-		var up 			= 87, // W
-			down 		= 83, // S
-			left 		= 65, // A
-			right 		= 68; // D
+		var up 			= 38, // W
+			down 		= 40, // S
+			left 		= 37, // A
+			right 		= 39; // D
 
 		switch ( key ) {
 			case up:
@@ -955,7 +987,7 @@
 	}
 
 	function shakeItKeyDownListener (e) {
-		var keyList = [87, 83, 65, 68];
+		var keyList = [38, 40, 37, 39];
 		
 		if (keyList.indexOf( e.keyCode ) == -1)
 			return;
@@ -1018,10 +1050,10 @@
 			return;
 
 		var key 		= e.keyCode,
-			up 			= 87, // W
-			down 		= 83, // S
-			left 		= 65, // A
-			right 		= 68, // D
+			up 			= 38, // W
+			down 		= 40, // S
+			left 		= 37, // A
+			right 		= 39, // D
 			spacebar	= 32, // spacebar
 			isJumping 	= false,
 			p 			= 80;
@@ -1051,10 +1083,10 @@
 
 	function keyUpListener (e) {
 		var key 		= e.keyCode,
-			up 			= 87, // W
-			down 		= 83, // S
-			left 		= 65, // A
-			right 		= 68, // D
+			up 			= 38, // W
+			down 		= 40, // S
+			left 		= 37, // A
+			right 		= 39, // D
 			spacebar	= 32, // spacebar
 			isJumping 	= false;
 

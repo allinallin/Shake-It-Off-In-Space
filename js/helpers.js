@@ -1,5 +1,26 @@
 (function (window) {
 	/**
+	 * Custom project-specific substitute for Modernizr. Tests pulled
+	 * from: http://diveintohtml5.info/everything.html
+	 * @type {Object}
+	 */
+	window.featureDetect = {
+		audio: function() {
+			return !!document.createElement('audio').canPlayType;
+		},
+		audioOgg: function() {
+			var a = document.createElement('audio');
+			return !!(a.canPlayType && a.canPlayType('audio/ogg; codecs="vorbis"').replace(/no/, ''));
+		},
+		audioWav: function() {
+			var a = document.createElement('audio');
+			return !!(a.canPlayType && a.canPlayType('audio/wav; codecs="1"').replace(/no/, ''));
+		},
+		canvas: function() {
+			return !!document.createElement('canvas').getContext;
+		}
+	};
+	/**
 	 * Returns the value of a randomly chosen property from a given object
 	 * @param  [Object] obj Object that has properties to be randomly chosen form
 	 * @return Value of chosen property
