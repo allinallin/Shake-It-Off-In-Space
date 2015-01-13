@@ -30,6 +30,7 @@ button {
     border-color: white;
     color: white; }
 
+.shake-it-indicator,
 .game-over,
 .countdown,
 .title {
@@ -50,10 +51,25 @@ button {
       -ms-transform: matrix(1, -0.1, 0, 1, 0, 0);
           transform: matrix(1, -0.1, 0, 1, 0, 0); }
 
+.shake-it-indicator,
 .game-over,
 .countdown {
   display: none;
   font-size: 4em; }
+
+.shake-it-indicator {
+  font-size: 4em;
+  -webkit-transition: -webkit-transform 0.1s;
+          transition: transform 0.1s;
+  -webkit-transform: scale3d(1, 1, 1);
+          transform: scale3d(1, 1, 1); }
+
+.shake-it-indicator[data-mode=off] {
+  color: #aaaaaa;
+  text-shadow: 0 0 25px #aaaaaa;
+  opacity: 0.5;
+  -webkit-transform: scale3d(0, 0, 0);
+          transform: scale3d(0, 0, 0); }
 
 .title * {
   margin: 0; }

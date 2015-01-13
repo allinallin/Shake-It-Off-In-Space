@@ -28,6 +28,8 @@
 	var gameState;
 	var countdown = document.querySelector('.countdown');
 
+	var shakeItIndicator = document.querySelector('.shake-it-indicator');
+
 	var gameOverMsg = document.querySelector('.game-over');
 	var replayButton = document.querySelector('.replay-button');
 
@@ -285,6 +287,7 @@
 	function loadChorus2 () {
 		gameState = 'chorus2';
 		shakeItInit();
+		shakeItIndicatorDisplay();
 	}
 
 	function onCompleteMusic ( sectionName ) {
@@ -910,6 +913,43 @@
 		}
 	}
 
+	function shakeItIndicatorDisplay() {
+		var intervalInstance = window.requestAnimationFrame(_getPosition);
+		var sectionOffset = 6000;
+
+		shakeItIndicator.style.display = 'block';
+		
+		function _getPosition () {
+			if (gameState != 'chorus2')
+				window.cancelAnimationFrame(intervalInstance);
+
+			var position = soundInstance.getPosition();
+			var enableFlag;
+
+			for (var i = shakeIt.windows.length - 1; i >= 0; i--) {
+				var lowerLimit = shakeIt.windows[i][0] * 1000,
+					upperLimit = shakeIt.windows[i][1] * 1000;
+
+				if (isInBetween( position, lowerLimit, upperLimit )) {
+					shakeItIndicator.setAttribute('data-mode', 'on');
+					enableFlag = true;
+					break;
+				}
+
+			};
+						
+			if (!enableFlag)
+				shakeItIndicator.setAttribute('data-mode', 'off');
+			
+			if (gameState == 'chorus2')
+				intervalInstance = window.requestAnimationFrame(_getPosition);
+		}
+
+		function isInBetween(val, min, max) {
+			return min <= val && val <= max;
+		}
+	}
+
 	function shakeItKeyUpListener (e) {
 		hero.standDown();
 	}
@@ -1051,6 +1091,7 @@
 		title.style.display = 'none';
 		playButton.style.display = 'none';
 		helpBox.style.display = 'none';
+		shakeItIndicator.style.display = 'none';
 		gameOverMsg.style.display = 'none';
 		replayButton.style.display = 'none';
 
@@ -1081,6 +1122,7 @@
 		clearInterval(haterInterval);
 		haterInterval = null;
 
+		shakeItIndicator.style.display = 'none';
 		gameOverMsg.style.display = 'block';
 		replayButton.style.display = 'block';
 
