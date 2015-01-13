@@ -2,6 +2,9 @@ body {
   background: #111111;
   font-family: 'Helvetica Neue', Helvetica, sans-serif; }
 
+p {
+  margin: 0; }
+
 strong {
   font-weight: 500; }
 
@@ -58,7 +61,6 @@ button {
   font-size: 4em; }
 
 .shake-it-indicator {
-  font-size: 4em;
   -webkit-transition: -webkit-transform 0.1s;
           transition: transform 0.1s;
   -webkit-transform: scale3d(1, 1, 1);
@@ -71,9 +73,7 @@ button {
   -webkit-transform: scale3d(0, 0, 0);
           transform: scale3d(0, 0, 0); }
 
-.title * {
-  margin: 0; }
-.title *:first-child {
+.title p {
   font-size: 4em;
   line-height: 1em; }
 .title .small {
@@ -127,6 +127,8 @@ button {
   color: white; }
   .help-box .briefing {
     margin: 3em 0; }
+    .help-box .briefing p {
+      margin: 1em 0; }
 
 .align-wrapper {
   display: table-cell;
@@ -136,8 +138,6 @@ button {
   -webkit-transform: matrix(1, -0.05, 0, 1, 0, 0);
       -ms-transform: matrix(1, -0.05, 0, 1, 0, 0);
           transform: matrix(1, -0.05, 0, 1, 0, 0); }
-  .help-controls p {
-    margin: 0; }
   .help-controls .controls {
     display: inline-block;
     vertical-align: middle; }
