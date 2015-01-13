@@ -465,25 +465,37 @@
 	function planetInit() {
 		// init planet
 		var scale = 1;
-		var bmp = new c.Bitmap(queue.getResult('planet'));
-		var bmpInitWidth = bmp.getBounds().width;
+		var g = new c.Graphics();
+		g.f("rgba(255,161,49,254)").p("EDP0ARMYjcgKBQg8kEhaYkEhaAyEOgyAUYgyAei+AomQgKYmQgKhaj6iggKYigAAl8CCjIgKYjIAAjciqhaAKYhaAKqKDIi+huYi+hui0AKAAAAYAAAAq8BQgyAeYgyAenMAyi+iWYi+iMnqCMAAAAIAAQuMBq4AAAIAArkYAAAAAKiMjcgU").cp().ef().f("rgba(232,150,42,254)").p("EDP0ARMYjcgKBQg8kEhaYkEhaAyEOgyAUYgyAei+AomQgKYmQgKhaj6iggKYigAAl8CCjIgKYjIAAjciqhaAKYhaAKqKDIi+huYi+hui0AKAAAAYAAAAq8BQgyAeYgyAenMAyi+iWYi+iMnqCMAAAAIAADwYDcAKE2AKGGAKYImAAKygoL4AyYH0AeH+BQISA8YH+A8H0AeH0BaYEiAyEsA8EYBQIAAnqYAAAAAKiMjcgU").cp().ef().f("rgba(255,161,49,254)").p("EC7CASwYlygehajmiggKYgUAAgoAAgoAKYC0FKJsAUhQha").cp().ef().f("rgba(255,161,49,254)").p("EDOuARCYiMgUAogyjmhQYg8gegyAKgeAKYBaE2F8g8AAha").cp().ef().f("rgba(255,161,49,254)").p("ECRKAP8YgygKgogKgegKYi+hui0AKAAAAYAAAAiqAUi0AUYFoCgIcAKg8hQ").cp().ef().f("rgba(255,161,49,254)").p("ECn+AQuYgKgKgKgKgKAAYgoAAgeAAgoAAYjIAAjciqhaAKYAAAAgKAAgKAAYCMD6EEhQEOAK").cp().ef().f("rgba(255,161,49,254)").p("EBsSANwYCgCWCqBQDwhkIgKgKYgygUgygUgogeYhkhGi0AAiMAU").cp().ef().f("rgba(198,120,42,254)").ss(10).s("rgba(198,120,42,254)").p("EB1MAV4YAAAehkAeiCAAYh4AAhugeAAgeYAAgeBugeB4AAYCCAABkAeAAAe").cp().ef().es().f("rgba(198,120,42,254)").ss(10).s("rgba(198,120,42,254)").p("EC+yAauYAAAejIAAj6gKYj6gUjIgeAKgUYAAgeDIAADwAKYD6AUDIAeAAAU").cp().ef().es().f("rgba(198,120,42,254)").ss(10).s("rgba(198,120,42,254)").p("EDMYAb+YAAAUgKAUgKAAYgKAAgKgUAAgUYAAgUAKgUAKAAYAKAAAKAUAAAU").cp().ef().es().f("rgba(198,120,42,254)").ss(6).s("rgba(198,120,42,254)").p("EB7cAWMYgoAKgogKgUgeYgKgoAUgoAegUYAogKAyAKAKAeYAUAogUAogoAU").cp().ef().es().f("rgba(198,120,42,254)").ss(10).s("rgba(198,120,42,254)").p("ECBEAZAYAAAUAoAKAoAAIGkAAYAoAAAegKAAgUIAAAAYAAgUgegKgoAAImkAAYgoAAgoAKAAAUIAAAA").cp().ef().es();
 
-		if (bmpInitWidth < canvasWidth)
-			scale = canvasWidth / bmpInitWidth;
+		var s = new c.Shape(g);
+		s.setBounds(0,0,681,113);
+
+		var initWidth = s.getBounds().width;
+
+		if (initWidth < canvasWidth)
+			scale = canvasWidth / initWidth;
 		else
-			scale = bmpInitWidth / canvasWidth;
+			scale = initWidth / canvasWidth;
 
-		bmp.scaleX = scale;
-		bmp.scaleY = scale;
-		bmp.x = canvasWidth / 2 - bmp.getTransformedBounds().width / 2;
-		bmp.y = canvasHeight;
+		var hackyOrigin = {
+			x: -666,
+			y: -84,
+			transformedX: -666 * scale,
+			transformedY: -84 * scale
+		}
+
+		s.x = hackyOrigin.transformedX;
+		s.y = canvasHeight;
+		s.scaleX = scale;
+		s.scaleY = scale;
 
 		// add planet to bottom of screen
-		planet = bmp;
+		planet = s;
 		stage.addChildAt( planet, numStars );
 		// move planet up into view
 		c.Tween.get(planet, {loop: false})
-			.to({ y: canvasHeight - planet.getTransformedBounds().height }, 2000)
+			.to({ y: canvasHeight - planet.getTransformedBounds().height + hackyOrigin.transformedY }, 2000)
 			.call(function() { changeStarSpeed('stop')});
 	}
 
