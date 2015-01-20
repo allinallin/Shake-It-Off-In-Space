@@ -146,6 +146,7 @@ module.exports = function(grunt) {
                         cwd: '<%= config.app %>',
                         dest: '<%= config.dist %>',
                         src: [
+                            '<%= config.app %>/.htaccess',
                             '<%= config.app %>/index.html', 
                             '<%= config.app %>/media/**/*.{webp,mp3,mp4,webm,ogg,ogv,wav}'
                         ]
