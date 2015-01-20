@@ -87,7 +87,7 @@
 	};
 
 	/* DEBUG VARIABLES */
-	var	debugMode = true;
+	var	debugMode = false;
 	if (debugMode) {
 		// var buttonHate = document.querySelector('.hate-button');
 		// var textDecibals = document.querySelector('.decibals');
@@ -656,17 +656,6 @@
 			}
 		}
 
-		this.bodySpin = function() {
-			that.heroBody.image = queue.getResult('hero-up');
-			c.Tween.get(that, {loop: false})
-				.to({rotation: 360}, 400)
-				.to({rotation: 0})
-				.call(function() {
-					that.heroBody.image = queue.getResult('hero-flying');
-				})
-		}
-
-
 		this.isRattling = false;
 		this.rattleStage = getRandomInt(1, 4);
 		this.rattleCounter = 0;
@@ -710,34 +699,53 @@
 			}
 		}
 
+		var attackTimer = null;
+
 		this.standDown = function () {
 			this.heroBody.image = queue.getResult('hero-flying');
 			this.heroBody.x = -this.heroBody.getTransformedBounds().width / 2;
 			this.heroBody.y = -this.heroBody.getTransformedBounds().height / 2;
+			if (attackTimer != null) clearTimeout(attackTimer);
 		}
 
 		this.attackUp = function() {
 			this.heroBody.image = queue.getResult('hero-up');
 			this.heroBody.x = -this.heroBody.getTransformedBounds().width / 2;
 			this.heroBody.y = -this.heroBody.getTransformedBounds().height / 2 - 20;
+			if (attackTimer != null) clearTimeout(attackTimer);
+			attackTimer = setTimeout(function() {
+				that.standDown();
+			}, 500);
 		}
 
 		this.attackDown = function() {
 			this.heroBody.image = queue.getResult('hero-down');
 			this.heroBody.x = -this.heroBody.getTransformedBounds().width / 2;
 			this.heroBody.y = -this.heroBody.getTransformedBounds().height / 2 + 20;
+			if (attackTimer != null) clearTimeout(attackTimer);
+			attackTimer = setTimeout(function() {
+				that.standDown();
+			}, 500);
 		}
 
 		this.attackLeft = function() {
 			this.heroBody.image = queue.getResult('hero-left');
 			this.heroBody.x = -this.heroBody.getTransformedBounds().width / 2 - 20;
 			this.heroBody.y = -this.heroBody.getTransformedBounds().height / 2;
+			if (attackTimer != null) clearTimeout(attackTimer);
+			attackTimer = setTimeout(function() {
+				that.standDown();
+			}, 500);
 		}
 
 		this.attackRight = function() {
 			this.heroBody.image = queue.getResult('hero-right');
 			this.heroBody.x = -this.heroBody.getTransformedBounds().width / 2 + 20;
 			this.heroBody.y = -this.heroBody.getTransformedBounds().height / 2;
+			if (attackTimer != null) clearTimeout(attackTimer);
+			attackTimer = setTimeout(function() {
+				that.standDown();
+			}, 500);
 		}
 	}
 
@@ -946,10 +954,10 @@
 		canvas.removeEventListener('keydown', keyDownListener, false);
 		canvas.removeEventListener('keyup', keyUpListener, false);
 		canvas.removeEventListener('keydown', shakeItKeyDownListener, false);
-		canvas.removeEventListener('keyup', shakeItKeyUpListener, false);
+		//canvas.removeEventListener('keyup', shakeItKeyUpListener, false);
 
 		canvas.addEventListener('keydown', shakeItKeyDownListener, false);
-		canvas.addEventListener('keyup', shakeItKeyUpListener, false);
+		//canvas.addEventListener('keyup', shakeItKeyUpListener, false);
 	}
 
 	function shakeItAttack (key) {
@@ -1045,12 +1053,6 @@
 					var hater = hero.getChildAt( shakeIt.enemyCounter - 1 );
 					popOffHater( hater );
 					--shakeIt.enemyCounter;
-				}
-
-				if (shakeIt.windowHitLimitTracker[i] == 3) {
-					hero.bodySpin();
-				} else {
-					console.log(shakeIt.windowHitLimitTracker[i]);
 				}
 
 				return;
