@@ -87,14 +87,14 @@
 	};
 
 	/* DEBUG VARIABLES */
-	var	debugMode = false;
+	var	debugMode = true;
 	if (debugMode) {
-		var buttonHate = document.querySelector('.hate-button');
-		var textDecibals = document.querySelector('.decibals');
-		var textFrequency = document.querySelector('.frequency');
-		var textWaveform = document.querySelector('.waveform');
+		// var buttonHate = document.querySelector('.hate-button');
+		// var textDecibals = document.querySelector('.decibals');
+		// var textFrequency = document.querySelector('.frequency');
+		// var textWaveform = document.querySelector('.waveform');
 
-		buttonHate.addEventListener('click', hateSession);
+		// buttonHate.addEventListener('click', hateSession);
 	}
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
@@ -301,16 +301,17 @@
 		stretchStarHeight( 'original' );
 		planetInit();
 
-		hero.rotation = 0;
 		hero.movingUp = false;
 		hero.movingDown = false;
 		hero.movingLeft = false;
 		hero.movingRight = false;
+		hero.rotation = 0;
 
 		gameState = 'landing';
 
 		c.Tween.get(hero, {loop: false, override: true})
 			.to({
+				rotation: 0,
 				x: canvasWidth / 2,
 				y: canvasHeight - hero.getBounds().height
 			}, 2000, c.Ease.quadOut);
@@ -464,9 +465,9 @@
 			freqPercent = freqValue / 255;
 
 		if (debugMode) {
-			textDecibals.innerHTML = freqFloatData[0];
-			textFrequency.innerHTML = freqValue;
-			textWaveform.innerHTML = timeByteData[0];
+			// textDecibals.innerHTML = freqFloatData[0];
+			// textFrequency.innerHTML = freqValue;
+			// textWaveform.innerHTML = timeByteData[0];
 		}
 
 		var radiusRatioLarge = freqPercent * 100;
@@ -656,9 +657,13 @@
 		}
 
 		this.bodySpin = function() {
+			that.heroBody.image = queue.getResult('hero-up');
 			c.Tween.get(that, {loop: false})
 				.to({rotation: 360}, 400)
-				.to({rotation: 0});
+				.to({rotation: 0})
+				.call(function() {
+					that.heroBody.image = queue.getResult('hero-flying');
+				})
 		}
 
 
@@ -712,7 +717,6 @@
 		}
 
 		this.attackUp = function() {
-			console.log('attackup')
 			this.heroBody.image = queue.getResult('hero-up');
 			this.heroBody.x = -this.heroBody.getTransformedBounds().width / 2;
 			this.heroBody.y = -this.heroBody.getTransformedBounds().height / 2 - 20;
