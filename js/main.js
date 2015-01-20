@@ -554,40 +554,57 @@
 		this.heroBody = bmp;
 		this.addChild( this.heroBody );
 	
-		this.movingUpDown	= false;
+		this.movingUp		= false;
+		this.movingDown 	= false;
 		this.movingLeft 	= false;
 		this.movingRight 	= false;
 
-		var movingLeftInterval = null;
+		var movingUpAnimId;
+		var movingDownAnimId;
+		var movingLeftAnimId;
+		var movingRightAnimId;
 
 		this.moveUp = function() {
-			if (!this.movingUpDown) {
+			if (this.movingUp)
+				return;
 
-				this.movingUpDown = true;
+			window.cancelAnimationFrame(movingUpAnimId);
+			this.movingDown = false;
+			this.movingUp = true;
+			movingLeftAnimId = window.requestAnimationFrame(tweenUp);
 
-				c.Tween.get(this, {loop: false})
-					.to({y: canvasHeight / 2 - 100}, 500, c.Ease.quadOut)
-					.to({y: canvasHeight / 2}, 500, c.Ease.quadIn)
-					.call(function () { that.movingUpDown = false; });
-
-			}	
-		};
-
-		this.moveDown = function() {
-			if (!this.movingUpDown) {
-
-				this.movingUpDown = true;
-
-				c.Tween.get(this, {loop: false})
-					.to({y: canvasHeight / 2 + 100}, 500, c.Ease.quadOut)
-					.to({y: canvasHeight / 2}, 500, c.Ease.quadIn)
-					.call(function () { that.movingUpDown = false; });
-
+			function tweenUp() {
+				c.Tween.get(that, {loop: false})
+					.to({y: hero.y - 40}, 100)
+					.call(function() { 
+						if (that.movingUp)
+							movingUpAnimId = window.requestAnimationFrame(tweenUp);
+						else
+							window.cancelAnimationFrame(movingUpAnimId);
+					});
 			}
 		}
 
-		var movingLeftAnimId;
-		var movingRightAnimId;
+		this.moveDown = function() {
+			if (this.movingDown)
+				return;
+
+			window.cancelAnimationFrame(movingDownAnimId);
+			this.movingUp = false;
+			this.movingDown = true;
+			movingLeftAnimId = window.requestAnimationFrame(tweenDown);
+
+			function tweenDown() {
+				c.Tween.get(that, {loop: false})
+					.to({y: hero.y + 40}, 100)
+					.call(function() { 
+						if (that.movingDown)
+							movingDownAnimId = window.requestAnimationFrame(tweenDown);
+						else
+							window.cancelAnimationFrame(movingDownAnimId);
+					});
+			}
+		}
 
 		this.moveLeft = function() {
 			if (this.movingLeft)
@@ -600,7 +617,7 @@
 
 			function tweenLeft() {
 				c.Tween.get(that, {loop: false})
-					.to({x: hero.x - 20, rotation: -25}, 100)
+					.to({x: hero.x - 30, rotation: -25}, 100)
 					.call(function() { 
 						if (that.movingLeft)
 							movingLeftAnimId = window.requestAnimationFrame(tweenLeft);
@@ -621,7 +638,7 @@
 
 			function tweenRight() {
 				c.Tween.get(that, {loop: false})
-					.to({x: hero.x + 20, rotation: 25}, 100)
+					.to({x: hero.x + 30, rotation: 25}, 100)
 					.call(function() { 
 						if (that.movingRight)
 							movingRightAnimId = window.requestAnimationFrame(tweenRight);
@@ -636,6 +653,12 @@
 				c.Tween.get(that, {loop: false})
 					.to({ rotation: 0}, 100);
 			}
+		}
+
+		this.bodySpin = function() {
+			c.Tween.get(that, {loop: false})
+				.to({rotation: 360}, 400)
+				.to({rotation: 0});
 		}
 
 
@@ -689,6 +712,7 @@
 		}
 
 		this.attackUp = function() {
+			console.log('attackup')
 			this.heroBody.image = queue.getResult('hero-up');
 			this.heroBody.x = -this.heroBody.getTransformedBounds().width / 2;
 			this.heroBody.y = -this.heroBody.getTransformedBounds().height / 2 - 20;
@@ -723,8 +747,8 @@
 
 		var randomMonsterNum = Math.floor((Math.random() * 4) + 1);
 		var bmp = new c.Bitmap(queue.getResult('monster' + randomMonsterNum));
-		bmp.scaleX = 0.7;
-		bmp.scaleY = 0.7;
+		bmp.scaleX = 0.9;
+		bmp.scaleY = 0.9;
 
 		this.haterBody = bmp;
 		this.addChild( this.haterBody );
@@ -733,7 +757,7 @@
 			this.addEventListener('tick', this.detectOverlapWithPlayer, false);
 
 			c.Tween.get(this, {loop: false})
-				.to(this.getDropOutPoints(xPos, yPos), 1800, c.Ease.quadIn)
+				.to(this.getDropOutPoints(xPos, yPos), 2000, c.Ease.quadIn)
 				.call(this.remove);
 		}
 
@@ -741,7 +765,7 @@
 			this.addEventListener('tick', this.detectOverlapWithPlayer, false);
 
 			c.Tween.get(this, {loop: false})
-				.to(this.getDropOutPoints(hero.x, hero.y), 1800, c.Ease.quadIn)
+				.to(this.getDropOutPoints(hero.x, hero.y), 2000, c.Ease.quadIn)
 				.call(this.remove);
 		}
 
@@ -802,7 +826,7 @@
 
 			if (hater.x > 0) {
 				hater.haterBody.regX = hater.getTransformedBounds().width;
-				hater.haterBody.scaleX = -0.7;
+				hater.haterBody.scaleX = -hater.haterBody.scaleX;
 			}
 
 			stage.addChild(hater);
@@ -899,9 +923,10 @@
 
 		if (hasEnemies) {
 			var totalChancesToRemove = 24;
+			var handicap = -8;
 			shakeIt.enemyCounter = hero.getNumChildren() - 1;
 
-			shakeIt.modulusFactor = Math.floor( totalChancesToRemove / shakeIt.enemyCounter );
+			shakeIt.modulusFactor = Math.floor( (totalChancesToRemove + handicap) / shakeIt.enemyCounter );
 			
 			shakeIt.hitCounter = 0;
 			shakeIt.windowHitLimitTracker = [];
@@ -911,8 +936,8 @@
 			};
 		}
 		
-		// console.log('enemies: ' + shakeIt.enemyCounter);
-		// console.log('hits to remove 1 enemy: ' + shakeIt.modulusFactor);
+		console.log('enemies: ' + shakeIt.enemyCounter);
+		console.log('hits to remove 1 enemy: ' + shakeIt.modulusFactor);
 
 		canvas.removeEventListener('keydown', keyDownListener, false);
 		canvas.removeEventListener('keyup', keyUpListener, false);
@@ -1002,20 +1027,26 @@
 
 			if (isInBetween( position, lowerLimit, upperLimit ) && shakeIt.windowHitLimitTracker[i] < 3) {
 
-				shakeIt.hitCounter++;
-				shakeIt.windowHitLimitTracker[i]++;
+				++shakeIt.hitCounter;
+				++shakeIt.windowHitLimitTracker[i];
 
 				if (shakeIt.enemyCounter > 0) {
 					console.log('rattle')
-					for (var i = hero.getNumChildren() - 2; i >= 0; i--) {
-						hero.getChildAt(i).rattle();
+					for (var j = hero.getNumChildren() - 2; j >= 0; j--) {
+						hero.getChildAt(j).rattle();
 					}
 				}		
 				
 				if (shakeIt.hitCounter % shakeIt.modulusFactor == 0 && shakeIt.enemyCounter > 0) {
 					var hater = hero.getChildAt( shakeIt.enemyCounter - 1 );
 					popOffHater( hater );
-					shakeIt.enemyCounter--;
+					--shakeIt.enemyCounter;
+				}
+
+				if (shakeIt.windowHitLimitTracker[i] == 3) {
+					hero.bodySpin();
+				} else {
+					console.log(shakeIt.windowHitLimitTracker[i]);
 				}
 
 				return;
@@ -1060,10 +1091,12 @@
 
 		switch ( key ) {
 			case up:
-				hero.moveUp();
+				if (!hero.movingUp)
+					hero.moveUp();
 				break;
 			case down:
-				hero.moveDown();
+				if (!hero.movingDown)
+					hero.moveDown();
 				break;
 			case left:
 				if (!hero.movingLeft)
@@ -1095,9 +1128,11 @@
 
 		switch ( key ) {
 			case up:
+				hero.movingUp = false;
 				hero.rotateCenter();
 				break;
 			case down:
+				hero.movingDown = false;
 				hero.rotateCenter();
 				break;
 			case left:
