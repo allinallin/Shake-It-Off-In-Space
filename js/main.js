@@ -11,9 +11,9 @@ requirejs.config({
 		// LOAD OUR OWN MODULES
 		'App' : '/js/app',
 		'Preloader' : '/js/states/preloader',
-	//	'Play' : '/js/states/play',
 		'Environment' : '/js/states/environment',
-	//	'GameOver' : '/js/states/gameover',	
+		'LeadIn' : '/js/states/leadin',
+		'Chorus1' : '/js/states/chorus1',
 	//	'Background' : '/js/entities/background',
 		'Hero' : '/js/entities/hero',
 		'Starfield' : '/js/entities/starfield'

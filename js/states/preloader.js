@@ -33,13 +33,10 @@ define('Preloader', [
 			this.queue = new createjs.LoadQueue();
 			this.queue.installPlugin(createjs.Sound);
 			this.queue.loadManifest(assetManifest);
-			this.queue.addEventListener('complete', this.handleComplete.bind(this));						
+			this.queue.addEventListener('complete', this.exit.bind(this));						
 		},
 		exit : function(){
 			this.onExit();
-		},
-		handleComplete : function(){
-			this.exit();
 		}
 	}
 

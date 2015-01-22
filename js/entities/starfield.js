@@ -76,17 +76,17 @@ define('Starfield',[
 		changeStarSpeed: function(speed) {
 			switch (speed) {
 				case 'stop':
-					for (var i = stars.length - 1; i >= 0; i--) {
+					for (var i = this.stars.length - 1; i >= 0; i--) {
 						this.stars[i].speed = 0;
 					}	
 					break;
 				case 'fast':
-					for (var i = stars.length - 1; i >= 0; i--) {
+					for (var i = this.stars.length - 1; i >= 0; i--) {
 						this.stars[i].speed = getRandomInt(10, 15);
 					}	
 					break;
 				case 'slow':
-					for (var i = stars.length - 1; i >= 0; i--) {
+					for (var i = this.stars.length - 1; i >= 0; i--) {
 						this.stars[i].speed = getRandomInt(3, 7);
 					}
 					break;
@@ -101,7 +101,7 @@ define('Starfield',[
 				g.drawCircle(0,0,1);
 			}
 
-			for (var i = starsAlpha.length - 1; i >= 0; i--) {
+			for (var i = this.starsAlpha.length - 1; i >= 0; i--) {
 				if (red == 'randomize') {
 					var colorHex = colors[pickRandomProperty(colors)],
 						color = hexToRgb( colorHex );

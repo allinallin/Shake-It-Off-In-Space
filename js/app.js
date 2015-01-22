@@ -1,16 +1,16 @@
 define('App', [
 	'createjs',
 	'Preloader',
-	'Environment'
+	'Environment',
+	'LeadIn',
+	'Chorus1'
 //	'Play',
 //	'GameOver'
-], function(c, Preloader, Environment){
+], function(c, Preloader, Env, LeadIn, Chorus1){
 	var App;
 
 	App = {
-		initialize : function(){			
-			var that = this;
-
+		initialize : function(){
 			//initialize canvas and stage
 			this.canvas = document.querySelector('.main-stage');
 			this.canvas.width = window.innerWidth;
@@ -21,43 +21,69 @@ define('App', [
 			createjs.Sound.alternateExtensions = ['wav'];
 			createjs.MotionGuidePlugin.install();
 
-			//start preloader
-			Preloader.onExit = function(){
+			function _onExit() {
 				console.log('Preloader done!');
-				that.setUpEnvironment();
+				this.setUpEnvironment();
 			}
 
+			Preloader.onExit = _onExit.bind(this);
 			Preloader.enter(this.canvas, this.stage);
 		},
 		setUpEnvironment : function() {
-			var that = this;
-
-			var title = document.querySelector('.title');
-			var playButton = document.querySelector('.play-button');
-			var launchButton = document.querySelector('.launch-button');
-			var helpBox = document.querySelector('.help-box');
-
-			playButton.addEventListener('click', function() {
-				helpBox.style.display = 'table';
-				canvas.focus();
-			}, false);
-
-			replayButton.addEventListener('click', this.goToLeadIn.bind(this), false);
-			launchButton.addEventListener('click', this.goToLeadIn.bind(this), false);
-
-			Environment.onExit = function() {
+			function _onExit() {
 				console.log('Environment done!');
+
+				Env.html.playButton.addEventListener('click', function() {
+					Env.html.helpBox.style.display = 'table';
+					this.blur();
+				}, false);
+
+				Env.html.replayButton.addEventListener('click', this.startGame.bind(this), false);
+				Env.html.launchButton.addEventListener('click', this.startGame.bind(this), false);
+			
+				Env.playRiff(this.goToLeadIn.bind(this));
 			}
 
-			Environment.enter(this.canvas, this.stage);
+			Env.onExit = _onExit.bind(this);
+			Env.enter(this.canvas, this.stage);
 		},
-		goToLeadIn : function() {
+		startGame : function() {
+			Env.gameStarted = true;
 
-		},
-		goToRiff : function() {
+			Env.html.title.style.display = 'none';
+			Env.html.playButton.style.display = 'none';
+			Env.html.helpBox.style.display = 'none';
 
+			Env.html.gameOverMsg.style.display = 'none';
+			Env.html.replayButton.style.display = 'none';
+
+			Env.hero.movingUp = false;
+			Env.hero.movingDown = false;
+
+			Env.starfield.colorStarsAlpha(255, 255, 255);
+
+			if (Env.soundInstance.playState == 'playFinished')
+				Env.playRiff(this.goToLeadIn.bind(this));
 		},
-		gotoMenu : function(){
+		goToLeadIn : function() {	
+			function _onExit() {
+				console.log('LeadIn done!');
+				this.goToChorus1();
+			}
+
+			LeadIn.onExit = _onExit.bind(this);
+			LeadIn.enter(this.canvas, this.stage);
+		},
+		goToChorus1 : function() {
+			function _onExit() {
+				console.log('Chorus1 done!');
+				this.goToChorus2();
+			}
+
+			Chorus1.onExit = _onExit.bind(this);
+			Chorus1.enter(this.canvas, this.stage);
+		},
+		goToChorus2 : function(){
 			// var that = this;
 			// //start Menu state			
 			// Menu.enter(this.canvas, this.stage);
@@ -65,18 +91,14 @@ define('App', [
 			// //	that.gotoPlay();
 			// }
 		},
-		gotoPlay : function(){
+		gotoGameOver : function(){
 			// var that = this;
 			// //start Play state
 			// Play.enter(this.canvas, this.stage, this.assets);
 			// Play.onExit = function(data){
 			// 	console.log('Game Over');
 			// }
-		},
-		gotoGameOver : function(){
-
 		}
-
 	}
 
 	return App;
