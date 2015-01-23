@@ -3,10 +3,11 @@ define('App', [
 	'Preloader',
 	'Environment',
 	'LeadIn',
-	'Chorus1'
+	'Chorus1',
+	'Chorus2'
 //	'Play',
 //	'GameOver'
-], function(c, Preloader, Env, LeadIn, Chorus1){
+], function(c, Preloader, Env, LeadIn, Chorus1, Chorus2){
 	var App;
 
 	App = {
@@ -84,12 +85,13 @@ define('App', [
 			Chorus1.enter(this.canvas, this.stage);
 		},
 		goToChorus2 : function(){
-			// var that = this;
-			// //start Menu state			
-			// Menu.enter(this.canvas, this.stage);
-			// Menu.onExit = function(data){				
-			// //	that.gotoPlay();
-			// }
+			function _onExit() {
+				console.log('Chorus2 done!');
+				this.gotoGameOver();
+			}
+
+			Chorus2.onExit = _onExit.bind(this);
+			Chorus2.enter(this.canvas, this.stage);
 		},
 		gotoGameOver : function(){
 			// var that = this;

@@ -1,12 +1,14 @@
 define('Environment', [	
 	'createjs',
 	'Hero',
+	'Hater',
 	'Starfield'
-], function(c, Hero, Starfield){
+], function(c, Hero, Hater, Starfield){
 	var Environment;
 
 	Environment = {
 		enter : function(canvas, stage){
+			this.canvas = canvas;
 			this.stage = stage;
 			this.hero = new Hero();
 			this.hero.x = canvas.width / 2;
@@ -14,7 +16,7 @@ define('Environment', [
 
 			this.starfield = new Starfield();
 			this.starfield.analyseMusic();
-			this.debugMode = false;
+			this.debugMode = true;
 			this.gameStarted = false;
 
 			createjs.Ticker.setFPS(60);
@@ -40,7 +42,7 @@ define('Environment', [
 
 			this.soundInstance = createjs.Sound.play( sectionName );
 
-			if (this.debugMode) soundInstance.volume = 0;
+			if (this.debugMode) this.soundInstance.volume = 0;
 
 			this.soundInstance.addEventListener('complete', function(e) {
 				if (callback && typeof(callback) == 'function')

@@ -202,7 +202,15 @@ define('Hero',[
 			attackTimer = setTimeout(function() {
 				that.standDown();
 			}, 500);
-		}	
+		}
+	Hero.prototype.moveToLand = function(canvas) {
+		createjs.Tween.get(this, {loop: false, override: true})
+			.to({
+				rotation: 0,
+				x: canvas.width / 2,
+				y: canvas.height - this.getBounds().height
+			}, 2000, createjs.Ease.quadOut);
+	}
 
 	return Hero;
 })

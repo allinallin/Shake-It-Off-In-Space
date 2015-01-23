@@ -1,7 +1,7 @@
 define('Starfield',[	
 	'createjs',
 	'colors'
-], function(c){
+], function(c, colors){
 	var Starfield;
 	
 	var numStars = 110;

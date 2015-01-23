@@ -33,37 +33,11 @@
 		}
 	})();
 
-	var stage
-	var queue;
-
-	var hero;
-	var hater;
+	
 
 	var song;
 	var music;
 	
-	var haterInterval = null;
-	var haterCounter;
-
-	var stars;
-	var starsLittle;
-	var starsBig;
-	var starsAlpha;
-	var numStars;
-	var planet;
-	
-	var canvas = document.querySelector('.main-stage');
-	var canvasWidth = window.innerWidth;
-	var canvasHeight = window.innerHeight;
-	
-	var gameStarted;
-	var gameState;
-	var countdown = document.querySelector('.countdown');
-
-	var shakeItIndicator = document.querySelector('.shake-it-indicator');
-
-	var gameOverMsg = document.querySelector('.game-over');
-	var replayButton = document.querySelector('.replay-button');
 
 	var shakeIt = {
 		hitCounter: null,
@@ -87,7 +61,6 @@
 	};
 
 	/* DEBUG VARIABLES */
-	var	debugMode = false;
 	if (debugMode) {
 		// var buttonHate = document.querySelector('.hate-button');
 		// var textDecibals = document.querySelector('.decibals');
@@ -105,124 +78,20 @@
 	}
 
 	function queueReady () {
-
-		setTimeout(function() {
-			playMusic( 'riff' );
-		}, 20);
 	}
 
 	
 
-	var soundInstance;
-
 	function playMusic ( sectionName ) {
-		if (soundInstance)
-			soundInstance.removeAllEventListeners();
-
-		soundInstance = c.Sound.play( sectionName );
-
-		if (debugMode) soundInstance.volume = 0;
-
-		soundInstance.addEventListener('complete', function() {
-			onCompleteMusic( sectionName );
-		});
 	}
 
 	function loadLeadin () {
-		var sectionOffset = 3000,
-			hitThree, hitTwo, hitOne, hitYeah;
-
-		countdown.style.display = 'block';
-		countdown.textContent = 'Ready...';
-
-		gameState = 'leadin';
-
-		var intervalInstance = window.requestAnimationFrame(_getPosition);
-		
-		function _getPosition () {
-			if (gameState != 'leadin')
-				window.cancelAnimationFrame(intervalInstance);
-
-			var position = soundInstance.getPosition();
-
-			if (!hitOne && position > 5525 - sectionOffset) {
-				hitOne = true;
-				countdown.textContent = '1';
-				colorStarsAlpha('randomize');
-			}
-			else if (!hitTwo && position > 5150 - sectionOffset){
-				hitTwo = true;
-				countdown.textContent = '2';
-				colorStarsAlpha('randomize');
-			}
-			else if (!hitThree && position > 4775 - sectionOffset) {
-				hitThree = true;
-				countdown.textContent = '3';
-				colorStarsAlpha('randomize');
-			}
-			else if (!hitYeah && position > 4313 - sectionOffset) {
-				hitYeah = true;
-				countdown.textContent = 'YEEAHH!';
-			}
-			
-			if (gameState == 'leadin')
-				intervalInstance = window.requestAnimationFrame(_getPosition);
-		}
-
-		//window.cancelAnimationFrame(intervalInstance);
 	}
 
 	function loadChorus1 () {
-		gameState = 'chorus1';
-
-		hateSession();
-		countdown.style.display = 'none';
-		changeStarSpeed( 'fast' );
-		stretchStarHeight( 10 );
-
-		var sectionOffset = 6000,
-			hitLanding;
-
-		var intervalInstance = window.requestAnimationFrame(_getPosition);
-		
-		function _getPosition () {
-			if (gameState != 'chorus1')
-				window.cancelAnimationFrame(intervalInstance);
-
-			var position = soundInstance.getPosition();
-
-			if (!hitLanding && position > 15000 - sectionOffset) {
-				hitLanding = true;
-				prepLandingScene();
-			}
-			
-			if (gameState == 'chorus1')
-				intervalInstance = window.requestAnimationFrame(_getPosition);
-		}
-
-		//window.cancelAnimationFrame(intervalInstance);
 	}
 
 	function prepLandingScene () {
-		changeStarSpeed( 'slow' );
-
-		stretchStarHeight( 'original' );
-		planetInit();
-
-		hero.movingUp = false;
-		hero.movingDown = false;
-		hero.movingLeft = false;
-		hero.movingRight = false;
-		hero.rotation = 0;
-
-		gameState = 'landing';
-
-		c.Tween.get(hero, {loop: false, override: true})
-			.to({
-				rotation: 0,
-				x: canvasWidth / 2,
-				y: canvasHeight - hero.getBounds().height
-			}, 2000, c.Ease.quadOut);
 	}
 
 	function loadChorus2 () {
@@ -262,42 +131,7 @@
 
 	
 
-	function planetInit() {
-		// init planet
-		var scale = 1;
-		var g = new c.Graphics();
-		g.f("rgba(255,161,49,254)").p("EDP0ARMYjcgKBQg8kEhaYkEhaAyEOgyAUYgyAei+AomQgKYmQgKhaj6iggKYigAAl8CCjIgKYjIAAjciqhaAKYhaAKqKDIi+huYi+hui0AKAAAAYAAAAq8BQgyAeYgyAenMAyi+iWYi+iMnqCMAAAAIAAQuMBq4AAAIAArkYAAAAAKiMjcgU").cp().ef().f("rgba(232,150,42,254)").p("EDP0ARMYjcgKBQg8kEhaYkEhaAyEOgyAUYgyAei+AomQgKYmQgKhaj6iggKYigAAl8CCjIgKYjIAAjciqhaAKYhaAKqKDIi+huYi+hui0AKAAAAYAAAAq8BQgyAeYgyAenMAyi+iWYi+iMnqCMAAAAIAADwYDcAKE2AKGGAKYImAAKygoL4AyYH0AeH+BQISA8YH+A8H0AeH0BaYEiAyEsA8EYBQIAAnqYAAAAAKiMjcgU").cp().ef().f("rgba(255,161,49,254)").p("EC7CASwYlygehajmiggKYgUAAgoAAgoAKYC0FKJsAUhQha").cp().ef().f("rgba(255,161,49,254)").p("EDOuARCYiMgUAogyjmhQYg8gegyAKgeAKYBaE2F8g8AAha").cp().ef().f("rgba(255,161,49,254)").p("ECRKAP8YgygKgogKgegKYi+hui0AKAAAAYAAAAiqAUi0AUYFoCgIcAKg8hQ").cp().ef().f("rgba(255,161,49,254)").p("ECn+AQuYgKgKgKgKgKAAYgoAAgeAAgoAAYjIAAjciqhaAKYAAAAgKAAgKAAYCMD6EEhQEOAK").cp().ef().f("rgba(255,161,49,254)").p("EBsSANwYCgCWCqBQDwhkIgKgKYgygUgygUgogeYhkhGi0AAiMAU").cp().ef().f("rgba(198,120,42,254)").ss(10).s("rgba(198,120,42,254)").p("EB1MAV4YAAAehkAeiCAAYh4AAhugeAAgeYAAgeBugeB4AAYCCAABkAeAAAe").cp().ef().es().f("rgba(198,120,42,254)").ss(10).s("rgba(198,120,42,254)").p("EC+yAauYAAAejIAAj6gKYj6gUjIgeAKgUYAAgeDIAADwAKYD6AUDIAeAAAU").cp().ef().es().f("rgba(198,120,42,254)").ss(10).s("rgba(198,120,42,254)").p("EDMYAb+YAAAUgKAUgKAAYgKAAgKgUAAgUYAAgUAKgUAKAAYAKAAAKAUAAAU").cp().ef().es().f("rgba(198,120,42,254)").ss(6).s("rgba(198,120,42,254)").p("EB7cAWMYgoAKgogKgUgeYgKgoAUgoAegUYAogKAyAKAKAeYAUAogUAogoAU").cp().ef().es().f("rgba(198,120,42,254)").ss(10).s("rgba(198,120,42,254)").p("ECBEAZAYAAAUAoAKAoAAIGkAAYAoAAAegKAAgUIAAAAYAAgUgegKgoAAImkAAYgoAAgoAKAAAUIAAAA").cp().ef().es();
-
-		var s = new c.Shape(g);
-		s.setBounds(0,0,681,113);
-
-		var initWidth = s.getBounds().width;
-
-		if (initWidth < canvasWidth)
-			scale = canvasWidth / initWidth;
-		else
-			scale = initWidth / canvasWidth;
-
-		var hackyOrigin = {
-			x: -666,
-			y: -84,
-			transformedX: -666 * scale,
-			transformedY: -84 * scale
-		}
-
-		s.x = hackyOrigin.transformedX;
-		s.y = canvasHeight;
-		s.scaleX = scale;
-		s.scaleY = scale;
-
-		// add planet to bottom of screen
-		planet = s;
-		stage.addChildAt( planet, numStars );
-		// move planet up into view
-		c.Tween.get(planet, {loop: false})
-			.to({ y: canvasHeight - planet.getTransformedBounds().height + hackyOrigin.transformedY }, 2000)
-			.call(function() { changeStarSpeed('stop')});
-	}
+	function planetInit() {}
 
 	/* 			*\
 		PLAYERS
@@ -313,75 +147,6 @@
 	 * Hater constructor
 	 */
 	function Hater () {
-		var that = this;
-
-		c.Container.call(this);
-
-		var randomMonsterNum = Math.floor((Math.random() * 4) + 1);
-		var bmp = new c.Bitmap(queue.getResult('monster' + randomMonsterNum));
-		bmp.scaleX = 0.9;
-		bmp.scaleY = 0.9;
-
-		this.haterBody = bmp;
-		this.addChild( this.haterBody );
-
-		this.moveTo = function(xPos, yPos) {
-			this.addEventListener('tick', this.detectOverlapWithPlayer, false);
-
-			c.Tween.get(this, {loop: false})
-				.to(this.getDropOutPoints(xPos, yPos), 2000, c.Ease.quadIn)
-				.call(this.remove);
-		}
-
-		this.moveToPlayer = function() {
-			this.addEventListener('tick', this.detectOverlapWithPlayer, false);
-
-			c.Tween.get(this, {loop: false})
-				.to(this.getDropOutPoints(hero.x, hero.y), 2000, c.Ease.quadIn)
-				.call(this.remove);
-		}
-
-		this.remove = function() {
-			this.removeEventListener('tick', this.detectOverlapWithPlayer, false);
-			stage.removeChild( this );
-		}
-
-		this.getDropOutPoints = function(xIn, yIn) {
-			var m = (yIn - that.y) / (xIn - that.x),
-				x = that.x > 0 ? -100 : canvasWidth,
-				b = getYIntercept(),
-				y = m * x + b,
-				dropOutPoints = {x: x, y: y};
-
-			function getYIntercept () {
-				//   that.y = m(that.x) + b
-				// + yIn    = m(xIn)    + b
-				// ------------------------
-				// that.y + yIn = m(that.x+xIn) + 2b
-
-				return ( (that.y + yIn) - m*(that.x + xIn) ) / 2;
-			}
-
-			// console.log('y = ' +m+ 'x + ' +b);
-			return dropOutPoints;
-		}
-
-		this.detectOverlapWithPlayer = function() {
-			var overlapDetails = detectOverlap( that, hero );
-			if ( overlapDetails.success ) {
-				// hero.rattle();
-				stickHaterToHero( that.clone(true), overlapDetails );
-
-				that.remove();
-				
-				var soundChoice = Math.round(Math.random());
-				
-				if (soundChoice)
-					c.Sound.play('bass');
-				else
-					c.Sound.play('synth');
-			}
-		}
 	}
 
 	/**
@@ -390,100 +155,14 @@
 	 * create a new Hater and drop it on the board
 	 */
 	function dropInHater () {
-		if (haterCounter < 7) {
-			var hater = new Hater();
-
-			hater.x = Math.random() < 0.5 ? -100 : canvasWidth;
-			hater.y = getRandomInt( 0, canvasHeight );
-
-			if (hater.x > 0) {
-				hater.haterBody.regX = hater.getTransformedBounds().width;
-				hater.haterBody.scaleX = -hater.haterBody.scaleX;
-			}
-
-			stage.addChild(hater);
-			haterCounter++;
-			hater.moveToPlayer();
-
-		} else {
-			clearInterval( haterInterval );
-			haterInterval = null;
-		}
 	}
-	var hatersRemoved = 0;
 	function popOffHater ( hater ) {
-		var xTarget = (hater.xSide == 'left') ? -canvasWidth / 2 - 100 : canvasWidth / 2;
-		var yTarget = hater.y - Math.floor((Math.random() * 200) + 1) - 100;
-
-		c.Tween.get(hater, {loop: false})
-			.to({ x: xTarget, y: yTarget }, 500)
-			.call(function() { hero.removeChild( hater ) });
-
-		hatersRemoved++;
 	}
 
 	function stickHaterToHero ( haterObj, overlapDetails ) {
-		if (overlapDetails.xSide == 'left') {
-			haterObj.x = hero.heroBody.x + overlapDetails.xHit - haterObj.getBounds().width;
-		} else {
-			haterObj.x = hero.heroBody.x + overlapDetails.xHit;
-		}
-
-		haterObj.xSide = overlapDetails.xSide;
-		haterObj.y = hero.heroBody.y + overlapDetails.yHit;
-
-		addHaterRattle( haterObj );
-
-		hero.addChildAt( haterObj, 0 );
 	}
 
-	function addHaterRattle( haterObj ) {	
-		haterObj.isRattling = false;
-		haterObj.rattleStage = getRandomInt(1, 4);
-		haterObj.rattleCounter = 0;
-
-		var rattleLength = 0.05;
-		var rattleMaxFrames = rattleLength * c.Ticker.getFPS();
-		
-		var that = haterObj;
-
-		haterObj.rattle = function() {
-			that.isRattling = true;
-			haterObj.rattleCounter = 0.2;
-
-			var intervalInstance = window.requestAnimationFrame( _moveIt );
-
-			function _moveIt () {
-				var offset = 10;
-				var stage = that.rattleStage;
-
-				switch ( stage ) {
-					case 1:
-				        that.y = that.y + offset;
-				        break;
-				    case 2:
-				        that.x = that.x + offset;
-				        break;
-				    case 3:
-				        that.y = that.y - offset;
-				        break;
-				    default:
-				        that.x = that.x - offset;
-				        break;
-			    }
-
-			    that.rattleStage = (stage < 4) ? stage + 1 : 1;
-
-			    if (that.isRattling && that.rattleCounter < rattleMaxFrames) {
-			    	that.rattleCounter++;
-			    	intervalInstance = window.requestAnimationFrame( _moveIt );
-			    } else {
-			    	that.isRattling = false;
-			    	window.cancelAnimationFrame(intervalInstance);
-			    }
-			}
-		}
-	}
+	function addHaterRattle( haterObj ) {	}
 
 	function shakeItInit () {
 		// Read time update
@@ -717,24 +396,6 @@
 	canvas.addEventListener('keyup', keyUpListener, false);
 
 	function startGame() {
-		canvas.focus();
-
-		gameStarted = true;
-
-		title.style.display = 'none';
-		playButton.style.display = 'none';
-		helpBox.style.display = 'none';
-		shakeItIndicator.style.display = 'none';
-		gameOverMsg.style.display = 'none';
-		replayButton.style.display = 'none';
-
-		hero.movingUp = false;
-		hero.movingDown = false;
-
-		colorStarsAlpha(255, 255, 255);
-
-		if (soundInstance.playState == 'playFinished')
-			playMusic( 'riff' );
 	}
 
 	function endGame() {
@@ -779,12 +440,6 @@
 	}
 
 	function hateSession () {
-		if (haterInterval == null) {
-			haterCounter = 0;
-			haterInterval = setInterval(dropInHater, 1000);
-		}
-
-		canvas.focus();
 	}
 
 	Hero.prototype = Object.create(c.Container.prototype);
