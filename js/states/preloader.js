@@ -5,10 +5,7 @@ define('Preloader', [
 
 	//list of assets to load
 	var assetManifest = [
-		{id:'bass', src:'/media/audio/XUXPSET3.mp3'},
-		{id:'synth', src:'/media/audio/EFXE_1.mp3'},
 		{id:'riff', src:'/media/audio/riff.ogg'},
-
 		{id:'leadin', src:'/media/audio/leadin.ogg'},
 		{id:'chorus1', src:'/media/audio/chorus1.ogg'},
 		{id:'chorus2', src:'/media/audio/chorus2.ogg'},

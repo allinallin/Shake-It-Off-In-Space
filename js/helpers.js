@@ -20,6 +20,18 @@
 			return !!document.createElement('canvas').getContext;
 		}
 	};
+
+	/**
+	 * Checks if given number is between two given number
+	 * @param  {Float} val Number to test
+	 * @param  {Float} min Lower boundary
+	 * @param  {Float} max Upper boundary
+	 * @return {boolean}     true or false
+	 */
+	window.numIsInBetween = function(val, min, max) {
+		return min <= val && val <= max;
+	}
+	
 	/**
 	 * Returns the value of a randomly chosen property from a given object
 	 * @param  [Object] obj Object that has properties to be randomly chosen form

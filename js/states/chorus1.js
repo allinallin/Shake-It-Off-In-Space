@@ -2,8 +2,8 @@ define('Chorus1', [
 	'createjs',
 	'Environment',
 	'Planet',
-	'HaterManager'
-], function(c, Env, Planet, HaterManager){
+	'HateSession'
+], function(c, Env, Planet, HateSession){
 	var Chorus1;
 
 	var sectionOffset = 6000;
@@ -18,8 +18,7 @@ define('Chorus1', [
 			
 			Env.gameState = 'chorus1';
 
-			Env.haterManager = new HaterManager({canvas: canvas, stage: stage});
-			Env.haterManager.hateSession( Env.hero );
+			HateSession.init(canvas, stage, Env.hero);
 
 			Env.html.countdown.style.display = 'none';
 			Env.starfield.changeStarSpeed( 'fast' );
@@ -42,6 +41,8 @@ define('Chorus1', [
 				if (!hitLanding && position > 15000 - sectionOffset) {
 					hitLanding = true;
 					Env.gameState = 'landing';
+
+					HateSession.terminate();
 
 					Env.starfield.changeStarSpeed('slow');
 					Env.starfield.stretchStarHeight('original');
