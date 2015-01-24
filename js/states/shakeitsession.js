@@ -39,9 +39,10 @@ define('ShakeItSession', [
 			this.windows = windows;
 			this.soundInstance = soundInstance;
 
-			var hasEnemies = hero.getNumChildren() > 1;
+			//var hasEnemies = hero.getNumChildren() > 1;
 
-			if (hasEnemies)	this.resetProps();
+			// if (hasEnemies)	
+				this.resetProps();
 
 			this.shakeItKeyDownBinded = this.shakeItKeyDownListener.bind(this);
 			this.bindAttackControls();
@@ -53,7 +54,7 @@ define('ShakeItSession', [
 			this.enemyCounter = this.hero.getNumChildren() - 1;
 			this.modulusFactor = Math.floor( (totalChancesToRemove + handicap) / this.enemyCounter );
 			this.hitCounter = 0;
-			this.windowHitLimitTracker = blankWindowHitLimits;
+			this.windowHitLimitTracker = blankWindowHitLimits.slice();
 		},
 		terminate: function() {
 			this.unbindAttackControls();

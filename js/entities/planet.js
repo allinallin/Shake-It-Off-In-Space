@@ -35,11 +35,19 @@ define('Planet',[
 	
 	Planet.prototype = Object.create(createjs.Shape.prototype);
 
-	Planet.prototype.bringToView = function() {
+	Planet.prototype.addToView = function() {
 		// move planet up into view
 		createjs.Tween.get(this, {loop: false})
 			.to({ y: canvas.height - this.getTransformedBounds().height + this.hackyOrigin.transformedY }, 2000)
 			.call(function() { Env.starfield.changeStarSpeed('stop'); });
+	}
+
+	Planet.prototype.removeFromView = function(stage) {
+		// move planet up into view
+		var planet = this;
+		createjs.Tween.get( this, {loop: false, override: true})
+			.to({y: canvas.height }, 2000)
+			.call(function() { stage.removeChild( planet ) });
 	}
 
 	return Planet;

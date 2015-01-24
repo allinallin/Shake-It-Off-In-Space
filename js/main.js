@@ -11,10 +11,10 @@ requirejs.config({
 		HateSession: '/js/states/hatesession',
 		Chorus2 : '/js/states/chorus2',
 		ShakeItSession: '/js/states/shakeitsession',
+		GameOver: '/js/states/gameover',
 		//	Background : '/js/entities/background',
 		Hero : '/js/entities/hero',
 		Hater : '/js/entities/hater',
-		HaterManager: '/js/entities/hatermanager',
 		Starfield : '/js/entities/starfield',
 		Planet : '/js/entities/planet'
 	},

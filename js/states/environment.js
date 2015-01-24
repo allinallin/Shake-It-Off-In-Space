@@ -16,7 +16,7 @@ define('Environment', [
 
 			this.starfield = new Starfield();
 			this.starfield.analyseMusic();
-			this.debugMode = true;
+			this.debugMode = false;
 			this.gameStarted = false;
 
 			createjs.Ticker.setFPS(60);
@@ -27,6 +27,20 @@ define('Environment', [
 			
 			stage.addChildAt( this.hero, this.starfield.stars.length );
 			this.exit();				
+		},
+		resetBehavior: function() {
+			this.soundInstance.stop();
+			this.hero.standDown();
+			this.hero.moveToCenter(this.canvas);
+			this.hero.movingUp = false;
+			this.hero.movingDown = false;
+			this.hero.movingLeft = false;
+			this.hero.movingRight = false;
+			this.starfield.changeStarSpeed('slow');
+			this.starfield.stretchStarHeight('original');
+			this.gameStarted = false;
+			this.gameState = 'riff';
+			this.planet.removeFromView(this.stage);
 		},
 		exit : function(){
 			this.onExit();

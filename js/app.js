@@ -4,10 +4,9 @@ define('App', [
 	'Environment',
 	'LeadIn',
 	'Chorus1',
-	'Chorus2'
-//	'Play',
-//	'GameOver'
-], function(c, Preloader, Env, LeadIn, Chorus1, Chorus2){
+	'Chorus2',
+	'GameOver'
+], function(c, Preloader, Env, LeadIn, Chorus1, Chorus2, GameOver){
 	var App;
 
 	App = {
@@ -58,9 +57,6 @@ define('App', [
 			Env.html.gameOverMsg.style.display = 'none';
 			Env.html.replayButton.style.display = 'none';
 
-			Env.hero.movingUp = false;
-			Env.hero.movingDown = false;
-
 			Env.starfield.colorStarsAlpha(255, 255, 255);
 
 			if (Env.soundInstance.playState == 'playFinished')
@@ -94,12 +90,7 @@ define('App', [
 			Chorus2.enter(this.canvas, this.stage);
 		},
 		gotoGameOver : function(){
-			// var that = this;
-			// //start Play state
-			// Play.enter(this.canvas, this.stage, this.assets);
-			// Play.onExit = function(data){
-			// 	console.log('Game Over');
-			// }
+			GameOver.enter(this.canvas, this.stage);
 		}
 	}
 

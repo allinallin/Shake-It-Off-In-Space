@@ -203,6 +203,13 @@ define('Hero',[
 				y: canvas.height - this.getBounds().height
 			}, 2000, createjs.Ease.quadOut);
 	}
+	Hero.prototype.moveToCenter = function(canvas) {
+		createjs.Tween.get( this, {loop: false, override: true})
+			.to({
+				x: canvas.width / 2,
+				y: canvas.height / 2
+			}, 2000, createjs.Ease.quadOut);
+	}
 
 	return Hero;
 })

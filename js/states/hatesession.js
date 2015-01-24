@@ -34,13 +34,6 @@ define('HateSession', [
 		},
 		terminate: function() {
 			this.haterInterval = null;
-
-			// if (this.hero.getNumChildren() > 1) {
-			// 	for (var i = this.hero.getNumChildren() - 2; i >= 0; i--) {
-			// 		this.popOffHater( this.hero.getChildAt(i) );
-			// 	}
-			// }
-
 			this.unbindDodgeControls();
 		},
 		deployHater: function() {
@@ -86,6 +79,13 @@ define('HateSession', [
 
 			this.hero.addChildAt( hater, 0 );
 		},
+		popOffAllHaters: function() {
+			if (this.hero.getNumChildren() > 1) {
+				for (var i = this.hero.getNumChildren() - 2; i >= 0; i--) {
+					this.popOffHater( this.hero.getChildAt(i) );
+				}
+			}
+		},
 		popOffHater: function(hater) {
 			var xTarget = (hater.xSide == 'left') ? -this.canvas.width / 2 - 100 : this.canvas.width / 2;
 			var yTarget = hater.y - Math.floor((Math.random() * 200) + 1) - 100;
@@ -102,7 +102,7 @@ define('HateSession', [
 			this.canvas.addEventListener('keydown', this.dodgeKeyDownBinded, false);
 		},
 		unbindDodgeControls: function() {
-			this.canvas.removeEventListener('keyup', this.dodgeKeyUpListener, false);
+			this.canvas.removeEventListener('keyup', this.dodgeKeyUpBinded, false);
 			this.canvas.removeEventListener('keydown', this.dodgeKeyDownBinded, false);			
 		},
 		dodgeKeyUpListener: function(e) {

@@ -7,13 +7,14 @@ define('Chorus1', [
 	var Chorus1;
 
 	var sectionOffset = 6000;
-	var hitLanding;
 	var intervalInstance;
 
 	Chorus1 = {
 		enter : function(canvas, stage){
 			this.canvas = canvas;
 			this.stage = stage;
+			this.hitLanding = false;
+
 			Env.playMusic('chorus1', this.exit.bind(this));
 			
 			Env.gameState = 'chorus1';
@@ -38,8 +39,8 @@ define('Chorus1', [
 
 				var position = Env.soundInstance.getPosition();
 
-				if (!hitLanding && position > 15000 - sectionOffset) {
-					hitLanding = true;
+				if (!this.hitLanding && position > 15000 - sectionOffset) {
+					this.hitLanding = true;
 					Env.gameState = 'landing';
 
 					HateSession.terminate();
@@ -55,7 +56,7 @@ define('Chorus1', [
 
 					Env.planet = new Planet();
 					this.stage.addChildAt( Env.planet, 110 );
-					Env.planet.bringToView();
+					Env.planet.addToView();
 					Env.hero.moveToLand(this.canvas);
 				}
 				

@@ -22,6 +22,7 @@ define('Chorus2', [
 		},
 		exit : function(){
 			Env.html.shakeItIndicator.style.display = 'none';
+			ShakeItSession.terminate();
 			this.onExit();
 		},
 		_getPosition : function() {
@@ -50,10 +51,6 @@ define('Chorus2', [
 				
 				if (Env.gameState == 'chorus2')
 					intervalInstance = window.requestAnimationFrame(tick.bind(this));
-			}
-
-			function isInBetween(val, min, max) {
-				return min <= val && val <= max;
 			}
 		}
 	}

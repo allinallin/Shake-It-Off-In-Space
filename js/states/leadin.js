@@ -5,10 +5,6 @@ define('LeadIn', [
 	var LeadIn;
 
 	var sectionOffset = 3000;
-	var hitThree;
-	var hitTwo;
-	var hitOne;
-	var hitYeah;
 	var intervalInstance;
 
 	LeadIn = {
@@ -20,13 +16,18 @@ define('LeadIn', [
 
 			Env.gameState = 'leadin';
 
-			intervalInstance = window.requestAnimationFrame(this._getPosition);
+			this.hitThree = false;
+			this.hitTwo = false;
+			this.hitOne = false;
+			this.hitYeah = false;
+
+			intervalInstance = window.requestAnimationFrame(this._getPosition.bind(this));
 		},
 		exit : function(){
 			this.onExit();
 		},
 		_getPosition : function() {
-			tick();
+			tick.call(this);
 
 			function tick() { 
 				if (Env.gameState != 'leadin')
@@ -34,28 +35,28 @@ define('LeadIn', [
 
 				var position = Env.soundInstance.getPosition();
 
-				if (!hitOne && position > 5525 - sectionOffset) {
-					hitOne = true;
+				if (!this.hitOne && position > 5525 - sectionOffset) {
+					this.hitOne = true;
 					Env.html.countdown.textContent = '1';
 					Env.starfield.colorStarsAlpha('randomize');
 				}
-				else if (!hitTwo && position > 5150 - sectionOffset){
-					hitTwo = true;
+				else if (!this.hitTwo && position > 5150 - sectionOffset){
+					this.hitTwo = true;
 					Env.html.countdown.textContent = '2';
 					Env.starfield.colorStarsAlpha('randomize');
 				}
-				else if (!hitThree && position > 4775 - sectionOffset) {
-					hitThree = true;
+				else if (!this.hitThree && position > 4775 - sectionOffset) {
+					this.hitThree = true;
 					Env.html.countdown.textContent = '3';
 					Env.starfield.colorStarsAlpha('randomize');
 				}
-				else if (!hitYeah && position > 4313 - sectionOffset) {
-					hitYeah = true;
+				else if (!this.hitYeah && position > 4313 - sectionOffset) {
+					this.hitYeah = true;
 					Env.html.countdown.textContent = 'YEEAHH!';
 				}
 				
 				if (Env.gameState == 'leadin')
-					intervalInstance = window.requestAnimationFrame(tick);
+					intervalInstance = window.requestAnimationFrame(tick.bind(this));
 			}
 		}
 	}
