@@ -58,6 +58,15 @@ module.exports = function(grunt) {
                 }]
             }
         },
+        requirejs: {
+          dist: {
+            options: {
+              mainConfigFile: '<%= config.app %>/js/main.js',
+              name: 'main',
+              out: '<%= config.dist %>/js/main.js'
+            }
+          }
+        },
 		sass: {
 			dist: {
 				files: {
@@ -166,7 +175,8 @@ module.exports = function(grunt) {
             'svgmin',
             'concat',
             'cssmin',
-            'uglify',
+//            'uglify',
+            'requirejs',
             'copy:dist',
             'rev', 
             'usemin'
