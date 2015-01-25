@@ -1,6 +1,7 @@
 define('ShakeItSession', [
-	'HateSession'
-], function(HateSession){
+	'HateSession',
+	'Helpers'
+], function(HateSession, Helpers){
 	var ShakeItSession;
 	
 	var totalChancesToRemove = 24;
@@ -86,7 +87,7 @@ define('ShakeItSession', [
 				var lowerLimit = windows[i][0] * 1000,
 					upperLimit = windows[i][1] * 1000;
 
-				if (numIsInBetween( position, lowerLimit, upperLimit ) && this.windowHitLimitTracker[i] < 3) {
+				if (Helpers.numIsInBetween( position, lowerLimit, upperLimit ) && this.windowHitLimitTracker[i] < 3) {
 
 					++this.hitCounter;
 					++this.windowHitLimitTracker[i];

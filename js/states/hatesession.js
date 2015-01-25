@@ -1,6 +1,7 @@
 define('HateSession', [	
-	'Hater'
-], function(Hater){
+	'Hater',
+	'Helpers'
+], function(Hater, Helpers){
 	var HateSession;
 
 	var keyDefs = {
@@ -19,10 +20,6 @@ define('HateSession', [
 
 			this.resetProps();
 
-			this.dodgeKeyUpBinded = this.dodgeKeyUpListener.bind(this);
-			this.dodgeKeyDownBinded = this.dodgeKeyDownListener.bind(this);
-			this.bindDodgeControls();	
-
 			this.haterInterval = setInterval(this.deployHater.bind(this, this.hero), 1000);
 
 			this.canvas.focus();
@@ -38,18 +35,20 @@ define('HateSession', [
 		},
 		deployHater: function() {
 			if (this.haterCounter < 7) {
-				var hater = new Hater();
-
-				hater.x = Math.random() < 0.5 ? -100 : this.canvas.width;
-				hater.y = getRandomInt( 0, this.canvas.height );
+				var hater = new Hater({
+					x: Math.random() < 0.5 ? -100 : this.canvas.width,
+					y: Helpers.getRandomInt( 0, this.canvas.height )
+				});
 
 				if (hater.x > 0) {
 					hater.haterBody.regX = hater.getTransformedBounds().width;
 					hater.haterBody.scaleX = -hater.haterBody.scaleX;
 				}
+
 				this.stage.addChild(hater);
 
 				this.haterCounter++;
+
 				hater.moveToTarget( this.hero, this.canvas, this.stage );
 				hater.addEventListener('tick', this.detectOverlapWithHero.bind(this, hater), false);
 			} else {
@@ -58,7 +57,7 @@ define('HateSession', [
 			}
 		},
 		detectOverlapWithHero: function(hater) {
-			var overlapDetails = detectOverlap( hater, this.hero );
+			var overlapDetails = Helpers.detectOverlap( hater, this.hero );
 			if ( overlapDetails.success ) {
 				// hero.rattle();
 				this.addHaterToHero( hater.clone(true), overlapDetails );
@@ -97,11 +96,21 @@ define('HateSession', [
 
 			this.hatersRemoved++;
 		},
-		bindDodgeControls: function() {
+		bindDodgeControls: function(canvas, hero) {
+			if (canvas) this.canvas = canvas;
+			if (hero) this.hero = hero;
+
+			this.dodgeKeyUpBinded = this.dodgeKeyUpListener.bind(this);
+			this.dodgeKeyDownBinded = this.dodgeKeyDownListener.bind(this);
+
 			this.canvas.addEventListener('keyup', this.dodgeKeyUpBinded, false);
 			this.canvas.addEventListener('keydown', this.dodgeKeyDownBinded, false);
+
+			this.canvas.focus();
 		},
 		unbindDodgeControls: function() {
+			if (!this.canvas) return;
+			
 			this.canvas.removeEventListener('keyup', this.dodgeKeyUpBinded, false);
 			this.canvas.removeEventListener('keydown', this.dodgeKeyDownBinded, false);			
 		},
@@ -123,9 +132,7 @@ define('HateSession', [
 			}
 		},
 		dodgeKeyDownListener: function(e) {
-			//	console.log('key: '+ e.keyCode);
 			var key	= e.keyCode;
-			var p 	= 80;
 
 			if (keyDefs.up.indexOf(key) !== -1) {
 				if (!this.hero.movingUp)

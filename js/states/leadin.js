@@ -1,7 +1,7 @@
 define('LeadIn', [	
 	'createjs',
 	'Environment'
-], function(c, Env){
+], function(c, Env, HateSession){
 	var LeadIn;
 
 	var sectionOffset = 3000;

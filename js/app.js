@@ -4,14 +4,17 @@ define('App', [
 	'Environment',
 	'LeadIn',
 	'Chorus1',
+	'HateSession',
 	'Chorus2',
-	'GameOver'
-], function(c, Preloader, Env, LeadIn, Chorus1, Chorus2, GameOver){
+	'GameOver',
+	'Helpers'
+], function(c, Preloader, Env, LeadIn, Chorus1, HateSession, Chorus2, GameOver, Helpers){
 	var App;
 
 	App = {
 		initialize : function(){
-			//initialize canvas and stage
+			Helpers.init();
+
 			this.canvas = document.querySelector('.main-stage');
 			this.canvas.width = window.innerWidth;
 			this.canvas.height = window.innerHeight;
@@ -20,6 +23,7 @@ define('App', [
 			
 			createjs.Sound.alternateExtensions = ['wav'];
 			createjs.MotionGuidePlugin.install();
+			createjs.Ticker.setFPS(60);
 
 			function _onExit() {
 				console.log('Preloader done!');
@@ -58,6 +62,9 @@ define('App', [
 			Env.html.replayButton.style.display = 'none';
 
 			Env.starfield.colorStarsAlpha(255, 255, 255);
+
+			HateSession.unbindDodgeControls();
+			HateSession.bindDodgeControls(this.canvas, Env.hero);
 
 			if (Env.soundInstance.playState == 'playFinished')
 				Env.playRiff(this.goToLeadIn.bind(this));

@@ -16,6 +16,7 @@ define('GameOver', [
 			
 			HateSession.popOffAllHaters();
 			HateSession.terminate();
+			HateSession.bindDodgeControls();
 			
 			ShakeItSession.terminate();
 		}

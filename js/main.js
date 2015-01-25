@@ -3,6 +3,7 @@ requirejs.config({
 		colors : '/bower_components/colors/js/colors',
 		createjs : '//code.createjs.com/createjs-2014.12.12.min',
 		//LOAD OUR OWN MODULES
+		Helpers : '/js/util/helpers',
 		App : '/js/app',
 		Preloader : '/js/states/preloader',
 		Environment : '/js/states/environment',

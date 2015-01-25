@@ -3,16 +3,12 @@ define('Preloader', [
 ], function(c){
 	var Preloader;
 
-	//list of assets to load
 	var assetManifest = [
 		{id:'riff', src:'/media/audio/riff.ogg'},
 		{id:'leadin', src:'/media/audio/leadin.ogg'},
 		{id:'chorus1', src:'/media/audio/chorus1.ogg'},
 		{id:'chorus2', src:'/media/audio/chorus2.ogg'},
 
-		{id:'planet', src:'/media/images/planet-surface.png'},
-
-		{id:'hero', src:'/media/images/player.png'},
 		{id:'hero-flying', src:'/media/images/player-flying.png'},
 		{id:'hero-left', src:'/media/images/player-left.png'},
 		{id:'hero-right', src:'/media/images/player-right.png'},

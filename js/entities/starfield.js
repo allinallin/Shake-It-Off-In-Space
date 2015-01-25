@@ -1,7 +1,8 @@
 define('Starfield',[	
 	'createjs',
-	'colors'
-], function(c, colors){
+	'colors',
+	'Helpers'
+], function(c, colors, Helpers){
 	var Starfield;
 	
 	var numStars = 110;
@@ -23,14 +24,14 @@ define('Starfield',[
 				
 		for(var i = 0; i < numStars; ++i) {
 	        var s = new createjs.Shape(g);
-		    s.x = getRandomInt(10, canvas.width - 10);
-		    s.y = getRandomInt(-250, canvas.height - 10);
-		    s.speed = getRandomInt(3, 7);
+		    s.x = Helpers.getRandomInt(10, canvas.width - 10);
+		    s.y = Helpers.getRandomInt(-250, canvas.height - 10);
+		    s.speed = Helpers.getRandomInt(3, 7);
 		    
 		    if (i < 100) {
 		    	s.alpha = Math.random() + 0.2;
 
-			    s.scaleX = getRandomInt(0.5, 2);
+			    s.scaleX = Helpers.getRandomInt(0.5, 2);
 		        s.scaleY = s.scaleX;
 
 		    	if (s.scaleX > 1)
@@ -55,8 +56,8 @@ define('Starfield',[
 			    curStar.y += curStar.speed;
 			    if(curStar.y > canvas.height)
 			    {
-		            curStar.x = getRandomInt(10, canvas.width - 10);
-			        curStar.y = -getRandomInt(20, canvas.height - 30);					
+		            curStar.x = Helpers.getRandomInt(10, canvas.width - 10);
+			        curStar.y = -Helpers.getRandomInt(20, canvas.height - 30);					
 			    }
 		    }
 		},
@@ -82,12 +83,12 @@ define('Starfield',[
 					break;
 				case 'fast':
 					for (var i = this.stars.length - 1; i >= 0; i--) {
-						this.stars[i].speed = getRandomInt(10, 15);
+						this.stars[i].speed = Helpers.getRandomInt(10, 15);
 					}	
 					break;
 				case 'slow':
 					for (var i = this.stars.length - 1; i >= 0; i--) {
-						this.stars[i].speed = getRandomInt(3, 7);
+						this.stars[i].speed = Helpers.getRandomInt(3, 7);
 					}
 					break;
 			}
@@ -103,8 +104,8 @@ define('Starfield',[
 
 			for (var i = this.starsAlpha.length - 1; i >= 0; i--) {
 				if (red == 'randomize') {
-					var colorHex = colors[pickRandomProperty(colors)],
-						color = hexToRgb( colorHex );
+					var colorHex = colors[Helpers.pickRandomProperty(colors)],
+						color = Helpers.hexToRgb( colorHex );
 
 					var g = new createjs.Graphics();
 					g.setStrokeStyle(1);

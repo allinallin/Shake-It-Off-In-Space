@@ -1,8 +1,9 @@
 define('Chorus2', [	
 	'createjs',
 	'Environment',
-	'ShakeItSession'
-], function(c, Env, ShakeItSession){
+	'ShakeItSession',
+	'Helpers'
+], function(c, Env, ShakeItSession, Helpers){
 	var Chorus2;
 	var sectionOffset = 6000;
 	var intervalInstance;
@@ -38,7 +39,7 @@ define('Chorus2', [
 				for (var i = this.shakeItWindows.length - 1; i >= 0; i--) {
 					var lowerLimit = this.shakeItWindows[i][0] * 1000,
 						upperLimit = this.shakeItWindows[i][1] * 1000;
-					if (numIsInBetween( position, lowerLimit, upperLimit )) {
+					if (Helpers.numIsInBetween( position, lowerLimit, upperLimit )) {
 						Env.html.shakeItIndicator.setAttribute('data-mode', 'on');
 						enableFlag = true;
 						break;
