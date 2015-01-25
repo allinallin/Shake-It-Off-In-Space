@@ -61,6 +61,7 @@ module.exports = function(grunt) {
         requirejs: {
           dist: {
             options: {
+            baseUrl: '<%= config.app %>/js',
               mainConfigFile: '<%= config.app %>/js/main.js',
               name: 'main',
               out: '<%= config.dist %>/js/main.js'

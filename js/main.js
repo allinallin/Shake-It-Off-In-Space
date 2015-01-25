@@ -1,5 +1,5 @@
 requirejs.config({
-    baseUrl: '.',
+    baseUrl: './js',
 	paths : {
 		colors : '../bower_components/colors/js/colors',
 		createjs : '//code.createjs.com/createjs-2014.12.12.min',
