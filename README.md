@@ -2,6 +2,8 @@
 HTML5 game experience that encourages players to escort an astronautical country-pop star through a dangerous anomaly inhabited by her long list of ex-lovers.
 ___
 ## TODO
+- End game rating
+- Detect and warn mobile devices
 - Reassess copy for context
 - Redraw squirrel monster to be less gross
 
@@ -17,8 +19,9 @@ Can be run on a basic web server. Uses grunt and bower for task and file managem
 The audio folder and files were intentionally left out of the `media` folder. They are required to run the app. Refer to the shared assets folder on Dropbox.
 
 ## Stack
-- [createJS](https://github.com/CreateJS)
+- [CreateJS](https://github.com/CreateJS)
 - [Sass](http://sass-lang.com/)
+- [RequireJS](http://requirejs.org/)
 - [grunt](http://gruntjs.com/)
 - [bower](http://bower.io/)
 
